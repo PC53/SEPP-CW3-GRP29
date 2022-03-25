@@ -5,6 +5,7 @@ import model.TicketedEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class SponsorshipState extends Object implements ISponsorshipState{
 
@@ -23,21 +24,36 @@ public class SponsorshipState extends Object implements ISponsorshipState{
 
     @Override
     public SponsorshipRequest addSponsorshipRequest(TicketedEvent event) {
-        return null;
+        SponsorshipRequest instance = new SponsorshipRequest(nextRequestNumber, event);
+        sponsorshipRequests.add(instance);
+        event.setSponsorshipRequest(instance);
+        nextRequestNumber++;
+        return instance;
     }
 
     @Override
     public SponsorshipRequest findRequestByNumber(long requestNumber) {
+        for (int i = 0; i < sponsorshipRequests.size(); i++) {
+            if (Objects.equals(sponsorshipRequests.get(i).getRequestNumber(), requestNumber)) {
+                return sponsorshipRequests.get(i);
+            }
+        }
         return null;
     }
 
     @Override
     public List<SponsorshipRequest> getAllSponsorshipRequests() {
-        return null;
+        return sponsorshipRequests;
     }
 
     @Override
     public List<SponsorshipRequest> getPendingSponsorshipRequests() {
-        return null;
+        List<SponsorshipRequest> PendingSponsorshipRequests = new ArrayList<>();
+        for (int i = 0; i < sponsorshipRequests.size(); i++) {
+            if (Objects.equals(sponsorshipRequests.get(i).getStatus(), false)) {
+                PendingSponsorshipRequests.add(sponsorshipRequests.get(i));
+            }
+        }
+        return PendingSponsorshipRequests;
     }
 }
