@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import model.Consumer;
 
 public class RegisterConsumerCommand extends Object implements ICommand{
 

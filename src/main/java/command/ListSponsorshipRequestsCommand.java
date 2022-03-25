@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import model.SponsorshipRequest;
 
 import java.util.List;
 

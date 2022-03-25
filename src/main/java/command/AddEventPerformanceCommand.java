@@ -1,6 +1,8 @@
 package command;
 
 import controller.Context;
+import model.EventPerformance;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
