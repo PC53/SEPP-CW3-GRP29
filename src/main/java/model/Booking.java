@@ -16,7 +16,6 @@ public class Booking extends Object {
     private EventPerformance attribute;
     private BookingStatus attribute2;
 
-    // may need a status property but its not included in documentation.
 
     public Booking(long bookingNumber,
                    Consumer booker,
