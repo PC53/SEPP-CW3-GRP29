@@ -4,7 +4,7 @@ import external.MockPaymentSystem;
 import external.PaymentSystem;
 import state.*;
 
-public class Context extends Object{
+public class Context extends Object {
     private PaymentSystem mockPaymentSystem;
     private IUserState userState;
     private IEventState eventState;
@@ -23,6 +23,10 @@ public class Context extends Object{
     }
 
     public Context(Context other){
+        this.userState = new UserState(other.getUserState());
+        this.eventState = new EventState(other.getEventState());
+        this.bookingState = new BookingState(other.getBookingState());
+        this.sponsorshipState = new SponsorshipState(other.getSponsorshipState());
         this.mockPaymentSystem = other.getPaymentSystem();
 
     }
@@ -46,5 +50,25 @@ public class Context extends Object{
     public ISponsorshipState getSponsorshipState(){
         return sponsorshipState;
     }
+
+    /*
+    @Override
+    public Context clone() {
+        Context context = null;
+        try {
+            context = (Context) super.clone();
+        } catch (CloneNotSupportedException e) {
+            context = new Context();
+        }
+        context.mockPaymentSystem = (MockPaymentSystem) this.mockPaymentSystem.clone();
+        context.userState = (IUserState) this.userState.clone();
+        context.eventState = (IEventState) this.eventState.clone();
+        context.bookingState = (IBookingState) this.bookingState.clone();
+        context.sponsorshipState = (ISponsorshipState) this.sponsorshipState.clone();
+        // clone attribute
+        return context;
+    }
+     */
+
 
 }
