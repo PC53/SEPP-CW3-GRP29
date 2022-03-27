@@ -50,7 +50,7 @@ public class SponsorshipState extends Object implements ISponsorshipState{
     public List<SponsorshipRequest> getPendingSponsorshipRequests() {
         List<SponsorshipRequest> PendingSponsorshipRequests = new ArrayList<>();
         for (int i = 0; i < sponsorshipRequests.size(); i++) {
-            if (Objects.equals(sponsorshipRequests.get(i).getStatus(), false)) {
+            if (Objects.equals(sponsorshipRequests.get(i).getStatus(), false)) { // false -> SponsorshipState.PENDING
                 PendingSponsorshipRequests.add(sponsorshipRequests.get(i));
             }
         }
