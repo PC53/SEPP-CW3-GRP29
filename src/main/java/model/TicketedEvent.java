@@ -4,7 +4,7 @@ public class TicketedEvent extends Event {
     private final double ticketPrice;
     private final int numTickets;
 
-    private SponsorshipRequest sponsorshipRequest;
+    private SponsorshipRequest currentSponsorshipRequest;
 
     public TicketedEvent(long eventNumber,
                          EntertainmentProvider organiser,
@@ -19,11 +19,14 @@ public class TicketedEvent extends Event {
     }
 
     public double getOriginalTicketPrice() {
-        return 0;
+        return ticketPrice;
     }
 
     public double getDiscountedTicketPrice() {
-        return 0;
+        if (this.isSponsored()) {
+            return ticketPrice * currentSponsorshipRequest.getSponsoredPricePercent();
+        }
+        else { return ticketPrice; }
     }
 
     public int getNumTickets() {
@@ -31,15 +34,15 @@ public class TicketedEvent extends Event {
     }
 
     public String getSponsorAccountEmail() {
-        return null;
+        return currentSponsorshipRequest.getSponsorAccountEmail();
     }
 
     public boolean isSponsored() {
-        return false;
+        return (currentSponsorshipRequest.getStatus() == SponsorshipStatus.ACCEPTED);
     }
 
     public void setSponsorshipRequest(SponsorshipRequest sponsorshipRequest) {
-
+         currentSponsorshipRequest = sponsorshipRequest;
     }
 
     @Override

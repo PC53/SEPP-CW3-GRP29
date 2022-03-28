@@ -8,7 +8,7 @@ public abstract class Event extends Object {
     private final EntertainmentProvider organiser;
     private final String title;
     private final EventType type;
-
+    // performance number
     private Map<Long, EventPerformance> performances;
     private EventStatus status;
 
@@ -44,19 +44,20 @@ public abstract class Event extends Object {
     }
 
     public void cancel() {
-
+        status = EventStatus.CANCELLED;
     }
 
     public void addPerformance(EventPerformance performance) {
-
+        // using the performance number as a key.
+        performances.put(performance.getPerformanceNumber(), performance);
     }
 
     public EventPerformance getPerformanceByNumber(long performanceNumber) {
-        return null;
+        return performances.get(performanceNumber);
     }
 
     public Collection<EventPerformance> getPerformances() {
-        return null;
+        return (Collection<EventPerformance>) performances;
     }
 
 }

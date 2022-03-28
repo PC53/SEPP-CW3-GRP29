@@ -1,10 +1,10 @@
 package model;
 
-import java.util.prefs.Preferences;
+import java.util.List;
 
 public class Consumer extends User{
 
-    private Booking bookings;
+    private List<Booking> bookings;
 
     private String name;
     private String phoneNumber;
@@ -17,10 +17,13 @@ public class Consumer extends User{
         super(email, password, paymentAccountEmail);
         this.name = name;
         this.phoneNumber = phoneNumber;
+
+        preferences = new ConsumerPreferences();
+        //bookings = new List<Booking>;
     }
 
     public void addBooking(Booking booking){
-
+        bookings.add(booking);
     }
 
     public String getName() {
@@ -32,15 +35,17 @@ public class Consumer extends User{
     }
 
     public void setPreferences(ConsumerPreferences preferences) {
+        // not sure if this is implemented how the documentation intends.
+        // you could individually access each attribute of preference and edit them directly.
         this.preferences = preferences;
     }
 
-    public Booking getBookings() {
+    public List<Booking> getBookings() {
         return bookings;
     }
 
     public void notify(String message) {
-
+        System.out.print(message);
     }
 
     public void setName(String newName) {

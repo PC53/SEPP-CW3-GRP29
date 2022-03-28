@@ -48,18 +48,24 @@ public class Booking extends Object {
         return performance;
     }
 
-    public void cancelByConsumer() {
+    public double getAmountPaid(){
+        return amountPaid;
+    }
 
+    public void cancelByConsumer() {
+        // this may need to be revised to check if it valid to cancel the booking
+        status = BookingStatus.CancelledByConsumer;
     }
 
     public void cancelPaymentFailed() {
-
+        status = BookingStatus.PaymentFailed;
     }
 
     public void cancelByProvider() {
-
+        status = BookingStatus.CancelledByProvider;
     }
 
+    // Don't know what this is for.
     @Override
     public String toString() {
         return null;

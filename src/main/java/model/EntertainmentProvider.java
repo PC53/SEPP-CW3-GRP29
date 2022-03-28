@@ -1,12 +1,14 @@
 package model;
 
 import external.EntertainmentProviderSystem;
+import external.MockEntertainmentProviderSystem;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class EntertainmentProvider extends User{
 
-    private Event events;
+    private List<Event> events;
 
     private String orgName;
     private String orgAddress;
@@ -26,6 +28,7 @@ public class EntertainmentProvider extends User{
                           List<String> otherRepEmails)
     {
         super(mainRepEmail, password, paymentAccountEmail);
+
         this.orgName = orgName;
         this.orgAddress = orgAddress;
         this.mainRepName = mainRepName;
@@ -35,7 +38,7 @@ public class EntertainmentProvider extends User{
     }
 
     public void addEvent(Event event) {
-
+        events.add(event);
     }
 
     public String getOrgName() {
@@ -50,7 +53,7 @@ public class EntertainmentProvider extends User{
         return orgAddress;
     }
 
-    public Event getEvents() {
+    public List<Event> getEvents() {
         return events;
     }
 
@@ -70,9 +73,9 @@ public class EntertainmentProvider extends User{
         this.otherRepEmails = otherRepEmails;
     }
 
-    public EntertainmentProviderSystem getProviderSystem(){
-        return null;
-        // ???
+    public EntertainmentProviderSystem getProviderSystem() {
+        //this may need to take other parameters in the future
+        return new MockEntertainmentProviderSystem(orgName, orgAddress);
     }
 
     @Override

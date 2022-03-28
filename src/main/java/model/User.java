@@ -2,14 +2,14 @@ package model;
 
 public abstract class User extends Object {
 
-    private final String email;
-    private final String password;
-    private final String paymentAccountEmail;
+    private String email;
+    private String userPassword;
+    private String paymentAccountEmail;
 
     protected User(String email, String password, String paymentAccountEmail) {
         this.email = email;
         // The password will need to be encrypted somehow.
-        this.password = password;
+        this.userPassword = password;
         this.paymentAccountEmail = paymentAccountEmail;
     }
 
@@ -18,15 +18,16 @@ public abstract class User extends Object {
     }
 
     public void setEmail(String newEmail) {
-
+        email = newEmail;
     }
 
     public boolean checkPasswordMatch(String password) {
-        return false;
+        return userPassword == password;
     }
 
     public void updatePassword(String newPassword) {
-
+        // This should be encrypted somehow.
+        userPassword = newPassword;
     }
 
     public String getPaymentAccountEmail() {
@@ -34,7 +35,7 @@ public abstract class User extends Object {
     }
 
     public void setPaymentAccountEmail(String newPaymentAccountEmail) {
-
+        paymentAccountEmail = newPaymentAccountEmail;
     }
 
     @Override

@@ -7,7 +7,8 @@ public class SponsorshipRequest extends Object {
     private SponsorshipStatus status;
     private Integer sponsoredPricePercent;
 
-    private String sponsorAccountEmail;
+    private String sponsorPayAccountEmail;
+
     private TicketedEvent attribute;
     private SponsorshipStatus attribute2;
 
@@ -15,7 +16,7 @@ public class SponsorshipRequest extends Object {
     public SponsorshipRequest(long requestNumber, TicketedEvent event) {
         this.requestNumber = requestNumber;
         this.event = event;
-        //status = SponsorshipStatus.PENDING;
+        status = SponsorshipStatus.PENDING;
     }
 
     public long getRequestNumber() {
@@ -27,23 +28,29 @@ public class SponsorshipRequest extends Object {
     }
 
     public SponsorshipStatus getStatus() {
-        return null;
+        return status;
     }
 
     public Integer getSponsoredPricePercent() {
-        return null;
+        if (status == SponsorshipStatus.ACCEPTED) {
+            return sponsoredPricePercent;
+        }
+        else { return null; }
     }
 
     public String getSponsorAccountEmail() {
-        return null;
+        return sponsorPayAccountEmail;
     }
 
     public void accept(int percent, String sponsorAccountEmail) {
+        status = SponsorshipStatus.ACCEPTED;
+        sponsoredPricePercent = percent;
+        sponsorPayAccountEmail = sponsorAccountEmail;
 
     }
 
     public void reject(){
-
+        status = SponsorshipStatus.REJECTED;
     }
 
 
