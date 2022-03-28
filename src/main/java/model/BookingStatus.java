@@ -1,7 +1,7 @@
 package model;
 
 public enum BookingStatus {
-    CancelledByConsumer, CancelledByProvider, PaymentFailed;
+    Active,CancelledByConsumer, CancelledByProvider, PaymentFailed;
 
     //public static BookingStatus valueOf(String name){ return null; }
 
