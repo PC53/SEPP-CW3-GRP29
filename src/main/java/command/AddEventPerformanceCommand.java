@@ -18,6 +18,7 @@ public class AddEventPerformanceCommand extends Object implements ICommand{
     private final boolean isOutdoors;
     private final int capacityLimit;
     private final int venueSize;
+    private boolean result;
 
     public AddEventPerformanceCommand(long eventNumber,
                                       String venueAddress,
