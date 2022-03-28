@@ -20,5 +20,4 @@ public interface EntertainmentProviderSystem {
     void recordSponsorshipAcceptance(long eventNumber, int sponsoredPricePercent);
 
     void recordSponsorshipRejection(long eventNumber);
-
 }

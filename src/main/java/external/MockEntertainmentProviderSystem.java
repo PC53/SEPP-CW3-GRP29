@@ -2,7 +2,7 @@ package external;
 
 import java.time.LocalDateTime;
 
-public class MockEntertainmentProviderSystem implements EntertainmentProviderSystem{
+public class MockEntertainmentProviderSystem extends Object implements EntertainmentProviderSystem{
 
     public MockEntertainmentProviderSystem(String orgName, String orgAddress) {
 
