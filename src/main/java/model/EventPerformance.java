@@ -63,7 +63,7 @@ public class EventPerformance extends Object{
         return hasSocialDistancing;
     }
 
-    public boolean isHasAirFiltration() {
+    public boolean hasAirFiltration() {
         return hasAirFiltration;
     }
 
@@ -74,6 +74,8 @@ public class EventPerformance extends Object{
     public int getVenueSize() {
         return venueSize;
     }
+
+    public int getCapacityLimit(){return capacityLimit;}
 
     @Override
     public String toString() {
