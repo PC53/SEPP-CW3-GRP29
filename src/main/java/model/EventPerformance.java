@@ -79,6 +79,18 @@ public class EventPerformance extends Object{
 
     @Override
     public String toString() {
-        return null;
+        return "EventPerformance{" +
+                "performanceNumber=" + performanceNumber +
+                ", event=" + event +
+                ", venueAddress='" + venueAddress + '\'' +
+                ", startDateTime=" + startDateTime +
+                ", endDateTime=" + endDateTime +
+                ", performerNames=" + performerNames +
+                ", hasSocialDistancing=" + hasSocialDistancing +
+                ", hasAirFiltration=" + hasAirFiltration +
+                ", isOutdoors=" + isOutdoors +
+                ", capacityLimit=" + capacityLimit +
+                ", venueSize=" + venueSize +
+                '}';
     }
 }

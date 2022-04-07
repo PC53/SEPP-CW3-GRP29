@@ -40,6 +40,9 @@ public abstract class User extends Object {
 
     @Override
     public String toString() {
-        return null;
+        return "User{" +
+                "email='" + email + '\'' +
+                ", paymentAccountEmail='" + paymentAccountEmail + '\'' +
+                '}';
     }
 }

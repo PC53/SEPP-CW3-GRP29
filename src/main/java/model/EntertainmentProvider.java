@@ -79,7 +79,15 @@ public class EntertainmentProvider extends User{
     }
 
     @Override
-    public String toString(){
-        return null;
+    public String toString() {
+        return "EntertainmentProvider{" +
+                "events=" + events +
+                ", orgName='" + orgName + '\'' +
+                ", orgAddress='" + orgAddress + '\'' +
+                ", mainRepName='" + mainRepName + '\'' +
+                ", mainRepEmail='" + mainRepEmail + '\'' +
+                ", otherRepNames=" + otherRepNames +
+                ", otherRepEmails=" + otherRepEmails +
+                '}';
     }
 }

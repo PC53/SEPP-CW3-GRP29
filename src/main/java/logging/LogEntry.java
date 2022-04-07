@@ -17,10 +17,15 @@ public class LogEntry extends Object{
     }
 
     public String getResult() {
-        return null;
+        return result.toString();
     }
 
-    public String toString(){
-        return null;
+    @Override
+    public String toString() {
+        return "LogEntry{" +
+                "callerName='" + callerName + '\'' +
+                ", result=" + result +
+                ", additionalInfo=" + additionalInfo +
+                '}';
     }
 }

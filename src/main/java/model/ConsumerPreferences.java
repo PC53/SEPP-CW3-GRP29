@@ -14,4 +14,15 @@ public class ConsumerPreferences extends Object {
         preferredMaxCapacity = Integer.MAX_VALUE;
         preferredMaxVenueSize = Integer.MAX_VALUE;
     }
+
+    @Override
+    public String toString() {
+        return "ConsumerPreferences{" +
+                "preferAirFiltration=" + preferAirFiltration +
+                ", preferOutdoorsOnly=" + preferOutdoorsOnly +
+                ", preferredMaxCapacity=" + preferredMaxCapacity +
+                ", preferredMaxVenueSize=" + preferredMaxVenueSize +
+                ", preferSocialDistancing=" + preferSocialDistancing +
+                '}';
+    }
 }

@@ -22,8 +22,7 @@ public class Booking extends Object {
                    EventPerformance performance,
                    int numTickets,
                    double amountPaid,
-                   LocalDateTime bookingDateTime)
-    {
+                   LocalDateTime bookingDateTime) {
         this.bookingNumber = bookingNumber;
         this.booker = booker;
         this.performance = performance;
@@ -32,7 +31,7 @@ public class Booking extends Object {
         this.bookingDateTme = bookingDateTime;
     }
 
-    public long getBookingNumber(){
+    public long getBookingNumber() {
         return bookingNumber;
     }
 
@@ -48,7 +47,9 @@ public class Booking extends Object {
         return performance;
     }
 
-    public double getAmountPaid(){return amountPaid;}
+    public double getAmountPaid() {
+        return amountPaid;
+    }
 
     public void cancelByConsumer() {
         // this may need to be revised to check if it valid to cancel the booking
@@ -64,8 +65,20 @@ public class Booking extends Object {
     }
 
     // Don't know what this is for.
+
+
     @Override
     public String toString() {
-        return null;
+        return "Booking{" +
+                "bookingNumber=" + bookingNumber +
+                ", booker=" + booker +
+                ", performance=" + performance +
+                ", numTickets=" + numTickets +
+                ", amountPaid=" + amountPaid +
+                ", bookingDateTme=" + bookingDateTme +
+                ", status=" + status +
+                ", attribute=" + attribute +
+                ", attribute2=" + attribute2 +
+                '}';
     }
 }

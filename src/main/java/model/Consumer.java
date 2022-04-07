@@ -58,7 +58,12 @@ public class Consumer extends User{
 
     @Override
     public String toString() {
-        return null;
+        return "Consumer{" +
+                "bookings=" + bookings +
+                ", name='" + name + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", preferences=" + preferences +
+                ", attribute=" + attribute +
+                '}';
     }
-
 }

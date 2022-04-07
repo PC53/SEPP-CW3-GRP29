@@ -7,7 +7,7 @@ public class NonTicketedEvent extends Event {
     }
 
     @Override
-    public String toString(){
-        return null;
+    public String toString() {
+        return super.toString();
     }
 }

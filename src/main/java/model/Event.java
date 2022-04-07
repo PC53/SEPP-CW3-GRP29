@@ -60,4 +60,17 @@ public abstract class Event extends Object {
         return (Collection<EventPerformance>) performances;
     }
 
+    @Override
+    public String toString() {
+        return "Event{" +
+                "eventNumber=" + eventNumber +
+                ", organiser=" + organiser.getOrgName() +
+                ", title='" + title + '\'' +
+                ", type=" + type +
+                ", performances=" + performances +
+                ", status=" + status +
+                ", attribute=" + attribute +
+                ", attribute2=" + attribute2 +
+                '}';
+    }
 }

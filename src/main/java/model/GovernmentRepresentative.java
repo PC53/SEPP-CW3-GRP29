@@ -6,7 +6,7 @@ public class GovernmentRepresentative extends User{
     }
 
     @Override
-    public String toString(){
-        return null;
+    public String toString() {
+        return super.toString();
     }
 }

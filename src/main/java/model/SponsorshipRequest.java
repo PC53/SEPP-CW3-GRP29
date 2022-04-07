@@ -10,7 +10,7 @@ public class SponsorshipRequest extends Object {
     private String sponsorPayAccountEmail;
 
     private TicketedEvent attribute;
-    private SponsorshipStatus attribute2;
+    private SponsorshipStatus attribute2; // this isn't needed here??
 
 
     public SponsorshipRequest(long requestNumber, TicketedEvent event) {
@@ -54,4 +54,15 @@ public class SponsorshipRequest extends Object {
     }
 
 
+    @Override
+    public String toString() {
+        return "SponsorshipRequest{" +
+                "requestNumber=" + requestNumber +
+                ", event=" + event +
+                ", status=" + status +
+                ", sponsoredPricePercent=" + sponsoredPricePercent +
+                ", sponsorPayAccountEmail='" + sponsorPayAccountEmail + '\'' +
+                ", Event=" + attribute.getTitle() +
+                '}';
+    }
 }

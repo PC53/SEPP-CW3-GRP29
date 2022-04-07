@@ -47,7 +47,14 @@ public class TicketedEvent extends Event {
 
     @Override
     public String toString() {
-        return null;
+        return "TicketedEvent{" +
+                "eventNumber=" + super.getEventNumber() +
+                ", organiser=" + super.getOrganiser().getOrgName() +
+                ", title='" + super.getTitle() + '\'' +
+                ", type=" + super.getType() +
+                "ticketPrice=" + ticketPrice +
+                ", numTickets=" + numTickets +
+                ", currentSponsorshipRequest=" + currentSponsorshipRequest +
+                '}';
     }
-
 }
