@@ -13,7 +13,7 @@ public class Consumer extends User{
 
     private ConsumerPreferences attribute;
 
-    Consumer(String name, String email, String phoneNumber, String password, String paymentAccountEmail) {
+    public Consumer(String name, String email, String phoneNumber, String password, String paymentAccountEmail) {
         super(email, password, paymentAccountEmail);
         this.name = name;
         this.phoneNumber = phoneNumber;

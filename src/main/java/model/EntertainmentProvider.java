@@ -18,7 +18,7 @@ public class EntertainmentProvider extends User{
     private List<String> otherRepEmails;
 
 
-    EntertainmentProvider(String orgName,
+    public EntertainmentProvider(String orgName,
                           String orgAddress,
                           String paymentAccountEmail,
                           String mainRepName,

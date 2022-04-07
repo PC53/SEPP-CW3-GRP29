@@ -48,9 +48,7 @@ public class Booking extends Object {
         return performance;
     }
 
-    public double getAmountPaid(){
-        return amountPaid;
-    }
+    public double getAmountPaid(){return amountPaid;}
 
     public void cancelByConsumer() {
         // this may need to be revised to check if it valid to cancel the booking

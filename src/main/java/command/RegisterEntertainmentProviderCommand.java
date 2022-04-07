@@ -1,6 +1,9 @@
 package command;
 
 import controller.Context;
+import model.EntertainmentProvider;
+import model.User;
+
 import java.util.List;
 
 public class RegisterEntertainmentProviderCommand extends Object implements ICommand{
@@ -13,6 +16,7 @@ public class RegisterEntertainmentProviderCommand extends Object implements ICom
     private final String password;
     private final List<String> otherRepNames;
     private final List<String> otherRepEmails;
+    private EntertainmentProvider newEP;
 
     public RegisterEntertainmentProviderCommand(String orgName,
                                                 String orgAddress,
@@ -34,11 +38,40 @@ public class RegisterEntertainmentProviderCommand extends Object implements ICom
 
     @Override
     public void execute(Context context) {
-        
+        if(orgName!=null && orgAddress!=null && paymentAccountEmail!=null && mainRepEmail!=null
+                && mainRepName != null && password != null && otherRepNames!=null && otherRepEmails != null){
+            boolean repRegistered = false;
+            for(String userEmail: context.getUserState().getAllUsers().keySet()){
+                if(userEmail.equals(mainRepEmail)){
+                    repRegistered = true;
+                    break;
+                }
+            }
+            boolean orgRegistered = false;
+            if(!repRegistered){
+                for(User user: context.getUserState().getAllUsers().values()){
+                    if(user instanceof EntertainmentProvider){
+                        if(orgName.equals(((EntertainmentProvider) user).getOrgName())) {
+                            if (orgAddress.equals(((EntertainmentProvider) user).getOrgAddress())) {
+                                orgRegistered = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            if(!orgRegistered){
+                newEP = new EntertainmentProvider(orgName,orgAddress,paymentAccountEmail,
+                                                                        mainRepName,mainRepEmail,password,otherRepNames,
+                                                                        otherRepEmails);
+                context.getUserState().addUser(newEP);
+                context.getUserState().setCurrentUser(newEP);
+            }
+        }
     }
 
     @Override
-    public Object getResult() {
-        return null;
+    public EntertainmentProvider getResult() {
+        return newEP;
     }
 }

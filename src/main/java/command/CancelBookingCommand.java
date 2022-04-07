@@ -27,7 +27,7 @@ public class CancelBookingCommand extends Object implements ICommand{
             if(booking != null) {
                 // the logged-in user is the booking owner
                 Consumer booker = booking.getBooker();
-                if (booker.getEmail() == currUser.getEmail()) {
+                if (booker.getEmail().equals(currUser.getEmail())) {
                     // the booking is still active (i.e., not cancelled previously)
                     if (booking.getStatus() == BookingStatus.Active) {
                         // the booked performance start is at least 24h away from now
@@ -52,6 +52,6 @@ public class CancelBookingCommand extends Object implements ICommand{
 
     @Override
     public Boolean getResult() {
-        return null;
+        return result;
     }
 }

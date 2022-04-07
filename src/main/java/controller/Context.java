@@ -11,8 +11,6 @@ public class Context extends Object {
     private IBookingState bookingState;
     private ISponsorshipState sponsorshipState;
 
-    private ISponsorshipState attribute;
-
     public Context(){
         this.mockPaymentSystem = new MockPaymentSystem();
         this.userState = new UserState();

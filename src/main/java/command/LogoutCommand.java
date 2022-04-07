@@ -10,7 +10,9 @@ public class LogoutCommand extends Object implements ICommand{
 
     @Override
     public void execute(Context context) {
-
+        if(context.getUserState().getCurrentUser() != null){
+            context.getUserState().setCurrentUser(null);
+        }
     }
 
     @Override

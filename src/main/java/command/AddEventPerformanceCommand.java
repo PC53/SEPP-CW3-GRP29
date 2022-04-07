@@ -1,7 +1,10 @@
 package command;
 
 import controller.Context;
+import model.EntertainmentProvider;
+import model.Event;
 import model.EventPerformance;
+import model.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,7 +21,7 @@ public class AddEventPerformanceCommand extends Object implements ICommand{
     private final boolean isOutdoors;
     private final int capacityLimit;
     private final int venueSize;
-    private boolean result;
+    private EventPerformance finalEP;
 
     public AddEventPerformanceCommand(long eventNumber,
                                       String venueAddress,
@@ -44,11 +47,48 @@ public class AddEventPerformanceCommand extends Object implements ICommand{
     
     @Override
     public void execute(Context context) {
-
+        if(startDateTime.isBefore(endDateTime)
+                && capacityLimit >= 1
+                && venueSize >= 1){
+            User currUser = context.getUserState().getCurrentUser();
+            if(currUser instanceof EntertainmentProvider){
+                Event event = context.getEventState().findEventByNumber(eventNumber);
+                if(event != null){
+                    if(currUser == event.getOrganiser()){
+                        for(Event eve : context.getEventState().getAllEvents()){
+                            if(eve.getTitle().equals(event.getTitle())){
+                                // check if there is any clash
+                                boolean clash = false;
+                                for(EventPerformance ep : eve.getPerformances()){
+                                    if(ep.getStartDateTime().isEqual(startDateTime)
+                                            && ep.getEndDateTime().isEqual(endDateTime)){
+                                        clash = true;
+                                        break;
+                                    }
+                                }
+                                if(!clash){
+                                    finalEP = context.getEventState().createEventPerformance(event,
+                                            venueAddress,
+                                            startDateTime,
+                                            endDateTime,
+                                            performerNames,
+                                            hasSocialDistancing,
+                                            hasAirFiltration,
+                                            isOutdoors,
+                                            capacityLimit,
+                                            venueSize);
+                                    event.addPerformance(finalEP);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
     public EventPerformance getResult() {
-        return null;
+        return finalEP;
     }
 }
