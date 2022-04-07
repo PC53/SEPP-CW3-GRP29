@@ -6,11 +6,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import model.Booking;
+import model.Event;
+import model.EventPerformance;
+import model.TicketedEvent;
 
 public class GovernmentReport1Command extends Object implements ICommand{
 
     private final LocalDateTime intervalStartInclusive;
     private final LocalDateTime intervalEndInclusive;
+    private List<Booking> output;
 
     public GovernmentReport1Command(LocalDateTime intervalStartInclusive,
                                     LocalDateTime intervalEndInclusive){
@@ -20,11 +24,29 @@ public class GovernmentReport1Command extends Object implements ICommand{
 
     @Override
     public void execute(Context context) {
+        if(intervalEndInclusive.isBefore(intervalStartInclusive) || intervalEndInclusive.isEqual(intervalStartInclusive)){
+            return;
+        }
+        // looping through all the events adding bookings in the interval
+        for (Event event : context.getEventState().getAllEvents()){
+            if(event instanceof TicketedEvent) {
+                long eventNumber = event.getEventNumber();
+
+                List<Booking> bookings = context.getBookingState().findBookingsByEventNumber(eventNumber);
+                for (Booking booking : bookings) {
+                    EventPerformance ep = booking.getEventPerformance();
+                    if(!ep.getStartDateTime().isBefore(intervalStartInclusive)
+                            && !ep.getEndDateTime().isAfter(intervalEndInclusive)){
+                        bookings.add(booking);
+                    }
+                }
+            }
+        }
 
     }
 
     @Override
     public List<Booking> getResult() {
-        return null;
+        return output;
     }
 }
