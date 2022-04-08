@@ -1,4 +1,5 @@
 package model;
+import at.favre.lib.crypto.bcrypt.BCrypt;
 
 public abstract class User extends Object {
 
@@ -9,7 +10,8 @@ public abstract class User extends Object {
     protected User(String email, String password, String paymentAccountEmail) {
         this.email = email;
         // The password will need to be encrypted somehow.
-        this.userPassword = password;
+        this.userPassword = BCrypt.withDefaults().hashToString(12, password.toCharArray());
+
         this.paymentAccountEmail = paymentAccountEmail;
     }
 
@@ -22,12 +24,12 @@ public abstract class User extends Object {
     }
 
     public boolean checkPasswordMatch(String password) {
-        return userPassword == password;
+        return BCrypt.verifyer().verify(password.toCharArray(), userPassword).verified;
     }
 
     public void updatePassword(String newPassword) {
         // This should be encrypted somehow.
-        userPassword = newPassword;
+        userPassword = BCrypt.withDefaults().hashToString(12, newPassword.toCharArray());
     }
 
     public String getPaymentAccountEmail() {
