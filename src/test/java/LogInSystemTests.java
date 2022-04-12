@@ -138,6 +138,9 @@ public class LogInSystemTests {
         controller.runCommand(new LogoutCommand());
     }
 
+    // Large test to test the logging in of different consumer's with different details.
+    // also testing the logging in of consumers after their details change.
+    // This may need to be split into smaller tests.
     @Test
     void loginConsumersTest() {
         Controller controller = new Controller();
@@ -177,5 +180,6 @@ public class LogInSystemTests {
     }
 
     // -----------TESTING ENTERTAINMENT REP LOGIN-----------
+
 
 }
