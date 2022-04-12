@@ -28,10 +28,7 @@ public class Controller extends Object {
         // run the command
         command.execute(context);
 
-        Object result = command.getResult();
-
         // log the command
-
         //String commandName = command.getName();
 
         //Logger.getInstance().logAction(commandName,command.getResult());
