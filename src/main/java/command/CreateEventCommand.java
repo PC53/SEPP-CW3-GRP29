@@ -1,7 +1,7 @@
 package command;
 
 import controller.Context;
-import jdk.jfr.EventType;
+import model.EventType;
 
 public abstract class CreateEventCommand extends Object implements ICommand{
 
