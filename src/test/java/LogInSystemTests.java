@@ -28,32 +28,144 @@ public class LogInSystemTests {
         System.out.println("---");
     }
 
-    private static void register3Consumers(Controller controller) {
+
+    // -------------TESTING CONSUMER LOGINS:--------------
+    // REGISTER USERS, LOGIN, CHECK LOGGED IN, UPDATE PASSWORD, LOGOUT, LOG BACK IN
+
+    // Registering Consumers
+    private static void registerConsumer1(Controller controller) {
         controller.runCommand(new RegisterConsumerCommand(
-                "John Biggson",
-                "jbiggson1@hotmail.co.uk",
-                "077893153480",
-                "jbiggson2",
-                "jbiggson1@hotmail.co.uk"
+                "Adam Apple",
+                "adamapple7@hotmail.co.uk",
+                "071740213850",
+                "aapple",
+                "adamapple7@hotmail.co.uk"
         ));
+    }
+
+    private static void logoutConsumer1(Controller controller) {
         controller.runCommand(new LogoutCommand());
+    }
+
+    private static void registerConsumer2(Controller controller) {
         controller.runCommand(new RegisterConsumerCommand(
-                "Jane Giantsdottir",
-                "jane@inf.ed.ac.uk",
-                "04462187232",
-                "giantsRverycool",
-                "jane@aol.com"
-        ));
-        controller.runCommand(new LogoutCommand());
-        controller.runCommand(new RegisterConsumerCommand(
-                "Wednesday Kebede",
-                "i-will-kick-your@gmail.com",
-                "-",
-                "it is wednesday my dudes",
-                "i-will-kick-your@gmail.com"
+                "Bernard Bee",
+                "berny@inf.ed.ac.uk",
+                "04417492071",
+                "bernyBurns",
+                "berny@aol.com"
         ));
         controller.runCommand(new LogoutCommand());
     }
 
-    private static void checkRegisteredIsLoggedIn(Controller controller,)
+    private static void registerConsumer3(Controller controller) {
+
+        controller.runCommand(new RegisterConsumerCommand(
+                "Charlie Chapel",
+                "char-chap@gmail.com",
+                "-",
+                "char chaps chill claps",
+                "char-chap@gmail.com"
+        ));
+        controller.runCommand(new LogoutCommand());
+    }
+
+    private static void registerConsumer4(Controller controller) {
+        controller.runCommand(new RegisterConsumerCommand(
+                "Derek Dirkly",
+                "DerekD@gmail.com",
+                "-",
+                "n84hd4dbn8djHDS738n",
+                "DerekD@gmail.com"
+        ));
+        controller.runCommand(new LogoutCommand());
+    }
+
+
+    // Login consumers:
+    private static void loginConsumer1(Controller controller) {
+        controller.runCommand(new LoginCommand("adamapple7@hotmail.co.uk", "aapple"));
+    }
+
+    private static void loginConsumer2(Controller controller) {
+        controller.runCommand(new LoginCommand("berny@inf.ed.ac.uk", "bernyBurns"));
+    }
+
+    private static void loginConsumer3(Controller controller) {
+        controller.runCommand(new LoginCommand("char-chap@gmail.com", "char chaps chill claps"));
+    }
+
+    private static void loginConsumer4(Controller controller) {
+        controller.runCommand(new LoginCommand("DerekD@gmail.com", "n84hd4dbn8djHDS738n"));
+    }
+
+    // check consumers are logged in:
+
+    /*
+    private static void checkRegisteredIsLoggedIn(Controller controller) {
+
+    }
+    */
+
+    private static void updateConsumer1(Controller controller) {
+        controller.runCommand(new UpdateConsumerProfileCommand(
+                "aaple",
+                "adamapple7@hotmail.co.uk",
+                "Apple Adam",
+                "071740210000",
+                "asdfghjk",
+                "adamapple7@hotmail.co.uk",
+                new ConsumerPreferences()));
+        controller.runCommand(new LogoutCommand());
+    }
+
+    private static void setConsumer2Preferences(Controller controller) {
+        ConsumerPreferences cpreferences = new ConsumerPreferences();
+        cpreferences.preferSocialDistancing = true;
+        cpreferences.preferOutdoorsOnly = true;
+        cpreferences.preferAirFiltration = true;
+        cpreferences.preferredMaxCapacity = 100;
+        cpreferences.preferredMaxVenueSize = 1000;
+        controller.runCommand(new UpdateConsumerProfileCommand(
+                "bernyBurns",
+                "berny@inf.ed.ac.uk",
+                "Bernard Bee",
+                "04417492071",
+                "bernyBurns",
+                "berny@inf.ed.ac.uk",
+                cpreferences
+        ));
+        controller.runCommand(new LogoutCommand());
+    }
+
+    @Test
+    void getSponsoredActiveEventBookingsBetween() {
+        Controller controller = new Controller();
+
+        // registering users and logging them out
+        registerConsumer1(controller);
+        logoutConsumer1(controller);
+
+        registerConsumer2(controller);
+        registerConsumer3(controller);
+        registerConsumer4(controller);
+
+        loginConsumer3(controller);
+        controller.runCommand(new LogoutCommand());
+
+        loginConsumer4(controller);
+        controller.runCommand(new LogoutCommand());
+
+        // updating consumer details
+        loginConsumer1(controller);
+        updateConsumer1(controller);
+
+        // setting consumer preferences
+        loginConsumer2(controller);
+        setConsumer2Preferences(controller);
+
+    }
+
+    // -----------TESTING ENTERTAINMENT REP LOGIN-----------
+
 }
