@@ -8,7 +8,7 @@ import java.util.Map;
 public class LoginCommand extends Object implements ICommand{
     private final String email;
     private final String password;
-    private boolean result;
+    private User result;
 
     public LoginCommand(String email, String password) {
         this.email = email;
@@ -18,7 +18,7 @@ public class LoginCommand extends Object implements ICommand{
     public void execute(Context context) {
         User user = context.getUserState().getAllUsers().get(email);
         if(user.checkPasswordMatch(password)){
-            result = true;
+            result = user;
             context.getUserState().setCurrentUser(user);
         }
     }
