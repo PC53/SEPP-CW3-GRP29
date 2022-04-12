@@ -3,7 +3,7 @@ package command;
 import controller.Context;
 import jdk.jfr.EventType;
 
-public class CreateEventCommand extends Object implements ICommand{
+public abstract class CreateEventCommand extends Object implements ICommand{
 
     protected Long eventNumberResult;
     protected final String title;
@@ -17,11 +17,6 @@ public class CreateEventCommand extends Object implements ICommand{
 
     protected boolean isUserAllowedToCreateEvent(Context context){
         return true;
-    }
-
-    @Override
-    public void execute(Context context) {
-
     }
 
     @Override

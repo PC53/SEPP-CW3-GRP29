@@ -1,6 +1,9 @@
 package command;
 
 import controller.Context;
+import model.ConsumerPreferences;
+import model.User;
+import state.IUserState;
 
 public class UpdateConsumerProfileCommand extends UpdateProfileCommand{
 
@@ -30,6 +33,12 @@ public class UpdateConsumerProfileCommand extends UpdateProfileCommand{
 
     @Override
     public void execute(Context context) {
-
+        IUserState generalUserState = context.getUserState();
+        User currentUser = generalUserState.getCurrentUser();
+        if (oldPassword == null || newName == null ||
+                newEmail == null || newPhoneNumber == null ||
+                newPassword == null || newPaymentAccountEmail == null || newPreferences == null) {
+            successResult = false;
+        } else if ()
     }
 }
