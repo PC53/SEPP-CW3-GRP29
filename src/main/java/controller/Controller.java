@@ -9,15 +9,6 @@ import state.IBookingState;
 
 public class Controller extends Object {
 
-    /* private PaymentSystem paymentSystem;
-    private IUserState userState;
-    private IEventState eventState;
-    private IBookingState bookingState;
-
-    private ISponsorshipState sponsorshipState;
-
-    private ISponsorshipState attribute; */
-
     private Context context;
 
     public Controller(){
@@ -27,11 +18,6 @@ public class Controller extends Object {
     public void runCommand(ICommand command){
         // run the command
         command.execute(context);
-
-        // log the command
-        //String commandName = command.getName();
-
-        //Logger.getInstance().logAction(commandName,command.getResult());
     }
 
 
