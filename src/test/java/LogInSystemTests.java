@@ -139,7 +139,7 @@ public class LogInSystemTests {
     }
 
     @Test
-    void getSponsoredActiveEventBookingsBetween() {
+    void loginConsumersTest() {
         Controller controller = new Controller();
 
         // registering users and logging them out
@@ -150,19 +150,29 @@ public class LogInSystemTests {
         registerConsumer3(controller);
         registerConsumer4(controller);
 
+        // logging in consumers
+        loginConsumer1(controller);
+        controller.runCommand(new LogoutCommand());
+        loginConsumer2(controller);
+        controller.runCommand(new LogoutCommand());
         loginConsumer3(controller);
         controller.runCommand(new LogoutCommand());
-
         loginConsumer4(controller);
         controller.runCommand(new LogoutCommand());
 
-        // updating consumer details
+        // updating consumer details then relogging in
         loginConsumer1(controller);
         updateConsumer1(controller);
+        controller.runCommand(new LogoutCommand());
+        loginConsumer1(controller);
+        controller.runCommand(new LogoutCommand());
 
-        // setting consumer preferences
+        // setting consumer preferences then relogging in
         loginConsumer2(controller);
         setConsumer2Preferences(controller);
+        controller.runCommand(new LogoutCommand());
+        loginConsumer2(controller);
+        controller.runCommand(new LogoutCommand());
 
     }
 
