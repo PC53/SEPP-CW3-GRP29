@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.Booking;
 import model.BookingStatus;
 import model.Consumer;
@@ -19,8 +20,10 @@ public class CancelBookingCommand extends Object implements ICommand{
 
     @Override
     public void execute(Context context) {
+
         // currently logged-in user is a Consumer
         User currUser = context.getUserState().getCurrentUser();
+
         if (currUser instanceof model.Consumer) {
             // the booking number corresponds to an existing Booking
             Booking booking = context.getBookingState().findBookingByNumber(bookingNumber);
@@ -40,7 +43,7 @@ public class CancelBookingCommand extends Object implements ICommand{
                             String sellerEmail = booking.getEventPerformance().getEvent().getOrganiser().getPaymentAccountEmail();
                             if(context.getPaymentSystem().processRefund(buyerEmail,sellerEmail,amountPaid)){
                                 this.result = true;
-                                booking.cancelByConsumer(); // TODO : should this be called after getResult()??
+                                booking.cancelByConsumer();
                             }
 
                         }
@@ -48,10 +51,19 @@ public class CancelBookingCommand extends Object implements ICommand{
                 }
             }
         }
+
+        String resultName;
+        if(result) {
+            resultName = "Booking_Successfully_cancelled";
+        }else {
+            resultName = "Booking Cancellation Unsuccessful";
+        }
+        Logger.getInstance().logAction("command.CancelBookingCommand", resultName);
     }
 
     @Override
     public Boolean getResult() {
         return result;
     }
+
 }

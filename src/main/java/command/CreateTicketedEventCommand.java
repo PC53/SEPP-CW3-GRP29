@@ -23,9 +23,13 @@ public class CreateTicketedEventCommand extends CreateEventCommand{
     public void execute(Context context) {
         User currentUser = context.getUserState().getCurrentUser();
         if (currentUser != null && (currentUser instanceof EntertainmentProvider)) {
-            // what happens to the government sponsorship request?
+
             TicketedEvent newTicketedEvent = context.getEventState().createTicketedEvent((EntertainmentProvider) currentUser, title, type, ticketPrice, numTickets);
             super.eventNumberResult = newTicketedEvent.getEventNumber();
+
+            if(requestSponsorship){
+                context.getSponsorshipState().addSponsorshipRequest(newTicketedEvent);
+            }
         }
     }
 }

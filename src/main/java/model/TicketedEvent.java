@@ -54,7 +54,6 @@ public class TicketedEvent extends Event {
                 ", type=" + super.getType() +
                 "ticketPrice=" + ticketPrice +
                 ", numTickets=" + numTickets +
-                ", currentSponsorshipRequest=" + currentSponsorshipRequest +
                 '}';
     }
 }
