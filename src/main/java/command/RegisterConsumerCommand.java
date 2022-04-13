@@ -36,13 +36,11 @@ public class RegisterConsumerCommand extends Object implements ICommand{
                 && paymentAccountEmail != null)
         {
             Map<String, User> users = context.getUserState().getAllUsers();
-            for (String userEmail : users.keySet() ){
-                if (userEmail.equals(email)) {
-                    consumer = new Consumer(name,email,phone,password,paymentAccountEmail);
-                    context.getUserState().addUser(consumer);
-                    context.getUserState().setCurrentUser(consumer);
-                    break;
-                }
+
+            if(users.get(email) == null){
+                consumer = new Consumer(name,email,phone,password,paymentAccountEmail);
+                context.getUserState().addUser(consumer);
+                context.getUserState().setCurrentUser(consumer);
             }
         }
 
