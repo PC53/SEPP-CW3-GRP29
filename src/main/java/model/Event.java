@@ -10,12 +10,8 @@ public abstract class Event extends Object {
     private final EntertainmentProvider organiser;
     private final String title;
     private final EventType type;
-    // performance number
     private Map<Long, EventPerformance> performances;
     private EventStatus status;
-
-    private EventType attribute;
-    private EventStatus attribute2;
 
 
     protected Event(long eventNumber, EntertainmentProvider organiser, String title, EventType type) {
@@ -24,6 +20,7 @@ public abstract class Event extends Object {
         this.organiser = organiser;
         this.title = title;
         this.type = type;
+        this.status = EventStatus.ACTIVE;
     }
 
     public long getEventNumber() {
@@ -73,8 +70,6 @@ public abstract class Event extends Object {
                 ", type=" + type +
                 ", performances=" + performances +
                 ", status=" + status +
-                ", attribute=" + attribute +
-                ", attribute2=" + attribute2 +
                 '}';
     }
 }

@@ -63,7 +63,8 @@ public class ListEventsCommand extends Object implements ICommand{
     }
 
     protected List<Event> filterByActive(List<Event> events) {
-        return events.stream().filter(f -> f.getStatus() == EventStatus.ACTIVE).collect(Collectors.toList());
+        List<Event> filteredEvents = events.stream().filter(f -> f.getStatus() == EventStatus.ACTIVE).collect(Collectors.toList());
+        return filteredEvents;
     }
 
     @Override

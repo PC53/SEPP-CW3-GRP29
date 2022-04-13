@@ -9,9 +9,6 @@ public class SponsorshipRequest extends Object {
 
     private String sponsorPayAccountEmail;
 
-    private TicketedEvent attribute;
-    private SponsorshipStatus attribute2; // this isn't needed here??
-
 
     public SponsorshipRequest(long requestNumber, TicketedEvent event) {
         this.requestNumber = requestNumber;
@@ -62,7 +59,6 @@ public class SponsorshipRequest extends Object {
                 ", status=" + status +
                 ", sponsoredPricePercent=" + sponsoredPricePercent +
                 ", sponsorPayAccountEmail='" + sponsorPayAccountEmail + '\'' +
-                ", Event=" + attribute.getTitle() +
                 '}';
     }
 }
