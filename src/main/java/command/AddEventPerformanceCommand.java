@@ -59,13 +59,17 @@ public class AddEventPerformanceCommand extends Object implements ICommand{
                             if(eve.getTitle().equals(event.getTitle())){
                                 // check if there is any clash
                                 boolean clash = false;
-                                for(EventPerformance ep : eve.getPerformances()){
-                                    if(ep.getStartDateTime().isEqual(startDateTime)
-                                            && ep.getEndDateTime().isEqual(endDateTime)){
-                                        clash = true;
-                                        break;
+
+                                if(eve.getPerformances() != null){
+                                    for(EventPerformance ep : eve.getPerformances()){
+                                        if(ep.getStartDateTime().isEqual(startDateTime)
+                                                && ep.getEndDateTime().isEqual(endDateTime)){
+                                            clash = true;
+                                            break;
+                                        }
                                     }
                                 }
+
                                 if(!clash){
                                     finalEP = context.getEventState().createEventPerformance(event,
                                             venueAddress,
