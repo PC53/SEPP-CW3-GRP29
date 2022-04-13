@@ -26,10 +26,11 @@ public class UserState extends Object implements IUserState {
      * Add pre-registered government representative accounts to the user state.
      */
     private void registerGovernmentRepresentatives() {
-        GovernmentRepresentative account1 = new GovernmentRepresentative("123456789@gmail.com","12345678", "123456789@gmail.com");
-        GovernmentRepresentative account2 = new GovernmentRepresentative("234567890@gmail.com", "23456789", "234567890@gmail.com");
-        users.put("123456789@gmail.com", account1);
-        users.put("234567890@gmail.com", account2);
+        GovernmentRepresentative account1 = new GovernmentRepresentative(
+                    "margaret.thatcher@gov.uk",
+                    "The Good times  ",
+                    "margaret.thatcher@gov.uk");
+        users.put("margaret.thatcher@gov.uk", account1);
     }
 
     @Override
