@@ -1,7 +1,7 @@
 package command;
 
 import controller.Context;
-import jdk.jfr.EventType;
+import model.*;
 
 public class CreateTicketedEventCommand extends CreateEventCommand{
 
@@ -13,6 +13,7 @@ public class CreateTicketedEventCommand extends CreateEventCommand{
                                       int numTickets,
                                       double ticketPrice,
                                       boolean requestSponsorship){
+        // not sure if the super is supposed to be here
         super(title, type);
         this.numTickets = numTickets;
         this.ticketPrice = ticketPrice;
@@ -21,6 +22,11 @@ public class CreateTicketedEventCommand extends CreateEventCommand{
 
     @Override
     public void execute(Context context) {
-
+        User currentUser = context.getUserState().getCurrentUser();
+        if (currentUser != null && (currentUser instanceof EntertainmentProvider)) {
+            // what happens to the government sponsorship request?
+            TicketedEvent newTicketedEvent = context.getEventState().createTicketedEvent((EntertainmentProvider) currentUser, title, type, ticketPrice, numTickets);
+            super.eventNumberResult = newTicketedEvent.getEventNumber();
+        }
     }
 }

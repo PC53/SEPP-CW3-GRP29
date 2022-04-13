@@ -1,8 +1,13 @@
 package command;
 
 import controller.Context;
+import model.Consumer;
+import model.EntertainmentProvider;
+import model.User;
+import state.IUserState;
 
 import java.util.List;
+import java.util.Map;
 
 public class UpdateEntertainmentProviderProfileCommand extends UpdateProfileCommand{
 
@@ -38,6 +43,51 @@ public class UpdateEntertainmentProviderProfileCommand extends UpdateProfileComm
 
     @Override
     public void execute(Context context) {
-//        super.execute(context);
+        IUserState generalUserState = context.getUserState();
+        Map<String, User> allUsers = generalUserState.getAllUsers();
+        User currentUser = generalUserState.getCurrentUser();
+
+        if (oldPassword != null && newOrgName != null && newOrgAddress != null && newPaymentAccountEmail != null && newMainRepName != null
+                && newMainRepEmail != null && newPassword != null && newOtherRepNames != null && newOtherRepEmails != null
+                && currentUser != null && currentUser.checkPasswordMatch(oldPassword) && (currentUser instanceof EntertainmentProvider)) {
+            boolean uniqueUserEmail = true;
+            boolean uniqueOrgEmail = true;
+            boolean uniqueOrgAddress = true;
+            for (String userEmail : allUsers.keySet()) {
+                if (userEmail.equals(newMainRepEmail)) {
+                    uniqueUserEmail = false;
+                    break;
+                }
+                for (String rep : newOtherRepEmails) {
+                    if (userEmail.equals(rep)) {
+                        uniqueUserEmail = false;
+                        break;
+                    }
+                }
+            }
+            for (User user : allUsers.values()) {
+                if (newOrgName.equals(((EntertainmentProvider) user).getOrgName())) {
+                    uniqueOrgEmail = false;
+                    break;
+                }
+                if (newOrgAddress.equals(((EntertainmentProvider) user).getOrgAddress())) {
+                    uniqueOrgAddress = false;
+                    break;
+                }
+            }
+            if (uniqueOrgAddress && uniqueOrgEmail && uniqueUserEmail) {
+                ((EntertainmentProvider) currentUser).setOrgName(newOrgName);
+                ((EntertainmentProvider) currentUser).setOrgAddress(newOrgAddress);
+                ((EntertainmentProvider) currentUser).setPaymentAccountEmail(newPaymentAccountEmail);
+                ((EntertainmentProvider) currentUser).setMainRepName(newMainRepName);
+                ((EntertainmentProvider) currentUser).setMainRepEmail(newMainRepEmail);
+                currentUser.updatePassword(newPassword);
+                ((EntertainmentProvider) currentUser).setOtherRepNames(newOtherRepNames);
+                ((EntertainmentProvider) currentUser).setOtherRepEmails(newOtherRepEmails);
+                super.successResult = true;
+            } else {
+                super.successResult = false;
+            }
+        }
     }
 }

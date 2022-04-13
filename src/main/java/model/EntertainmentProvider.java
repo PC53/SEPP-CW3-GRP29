@@ -53,6 +53,8 @@ public class EntertainmentProvider extends User{
         return orgAddress;
     }
 
+    public void setOrgAddress(String orgAddress) { this.orgAddress = orgAddress; }
+
     public List<Event> getEvents() {
         return events;
     }

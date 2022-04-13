@@ -1,7 +1,9 @@
 package command;
 
 import controller.Context;
-import jdk.jfr.EventType;
+import model.EntertainmentProvider;
+import model.EventType;
+import model.User;
 
 public abstract class CreateEventCommand extends Object implements ICommand{
 
@@ -16,11 +18,20 @@ public abstract class CreateEventCommand extends Object implements ICommand{
     }
 
     protected boolean isUserAllowedToCreateEvent(Context context){
-        return true;
+        User currentUser = context.getUserState().getCurrentUser();
+        if (currentUser != null && (currentUser instanceof EntertainmentProvider)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public Long getResult() {
-        return null;
+        if (eventNumberResult != null) {
+            return eventNumberResult;
+        } else {
+            return null;
+        }
     }
 }

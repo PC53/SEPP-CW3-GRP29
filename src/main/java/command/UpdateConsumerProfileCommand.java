@@ -1,9 +1,12 @@
 package command;
 
 import controller.Context;
+import model.Consumer;
 import model.ConsumerPreferences;
 import model.User;
 import state.IUserState;
+
+import java.util.Map;
 
 public class UpdateConsumerProfileCommand extends UpdateProfileCommand{
 
@@ -34,11 +37,29 @@ public class UpdateConsumerProfileCommand extends UpdateProfileCommand{
     @Override
     public void execute(Context context) {
         IUserState generalUserState = context.getUserState();
+        Map<String, User> allUsers = generalUserState.getAllUsers();
         User currentUser = generalUserState.getCurrentUser();
-        if (oldPassword == null || newName == null ||
-                newEmail == null || newPhoneNumber == null ||
-                newPassword == null || newPaymentAccountEmail == null || newPreferences == null) {
-            successResult = false;
-        } else if ()
+
+        if (oldPassword != null && newName != null && newEmail != null && newPhoneNumber != null && newPassword != null && newPaymentAccountEmail != null
+                && newPreferences != null && currentUser != null && currentUser.checkPasswordMatch(oldPassword) && (currentUser instanceof Consumer)) {
+            boolean uniqueEmail = true;
+            for (String userEmail : allUsers.keySet()) {
+                if (userEmail.equals(newEmail)) {
+                    uniqueEmail = false;
+                    break;
+                }
+            }
+            if (uniqueEmail) {
+                ((Consumer) currentUser).setName(newName);
+                ((Consumer) currentUser).setEmail(newEmail);
+                ((Consumer) currentUser).setPhoneNumber(newPhoneNumber);
+                ((Consumer) currentUser).updatePassword(newPassword);
+                ((Consumer) currentUser).setPaymentAccountEmail(newPaymentAccountEmail);
+                ((Consumer) currentUser).setPreferences(newPreferences);
+                super.successResult = true;
+            } else {
+                super.successResult = false;
+            }
+        }
     }
 }

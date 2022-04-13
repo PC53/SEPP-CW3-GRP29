@@ -19,23 +19,22 @@ public abstract class UpdateProfileCommand extends Object implements ICommand{
         IUserState generalUserState = context.getUserState();
         User currentUser = generalUserState.getCurrentUser();
 
-//      !check with user state class to see what edge cases are already handles!
-        if (oldPassword.equals("") || newEmail.equals("") || oldPassword == null || newEmail == null) {
-            successResult = false;
-        } else if (currentUser.checkPasswordMatch(oldPassword) && currentUser.getEmail().equals(newEmail)){
-            successResult = true;
+        if (currentUser.checkPasswordMatch(oldPassword)) {
+            boolean validEmail = true;
+            for (String userEmail : generalUserState.getAllUsers().keySet()) {
+                if (userEmail.equals(newEmail)) {
+                    validEmail = false;
+                    break;
+                }
+            }
+            return validEmail;
         } else {
-            successResult = false;
+            return false;
         }
-        return successResult;
     }
 
     @Override
     public Object getResult() {
-        if (successResult == true){
-            return true;
-        } else {
-            return false;
-        }
+        return successResult == true;
     }
 }

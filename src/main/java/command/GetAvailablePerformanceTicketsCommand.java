@@ -1,11 +1,15 @@
 package command;
 
 import controller.Context;
+import model.Event;
+import model.EventPerformance;
+import model.TicketedEvent;
 
 public class GetAvailablePerformanceTicketsCommand extends Object implements ICommand{
 
     private final long eventNumber;
     private final long performanceNumber;
+    private Integer tickets;
 
     public GetAvailablePerformanceTicketsCommand(long eventNumber,
                                                  long performanceNumber){
@@ -15,10 +19,20 @@ public class GetAvailablePerformanceTicketsCommand extends Object implements ICo
 
     @Override
     public void execute(Context context) {
+        Event currentEvent = context.getEventState().findEventByNumber(eventNumber);
+        EventPerformance currentPerformance = currentEvent.getPerformanceByNumber(performanceNumber);
 
+        if (currentPerformance != null && currentEvent != null && currentEvent instanceof TicketedEvent) {
+            // i rly dont think this is supposed to be implemented like this
+            tickets = ((TicketedEvent) currentEvent).getNumTickets();
+        }
     }
 
     public Integer getResult(){
-        return null;
+        if (tickets != null) {
+            return tickets;
+        } else {
+            return null;
+        }
     }
 }
