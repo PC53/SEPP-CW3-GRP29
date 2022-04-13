@@ -12,10 +12,6 @@ public class MockPaymentSystem extends Object implements PaymentSystem{
         this.transactions = new ArrayList<>();
     }
 
-    public MockPaymentSystem(MockPaymentSystem other) {
-        this.transactions = new ArrayList<>(other.transactions);
-    }
-
     @Override
     public boolean processPayment(String buyerAccountEmail, String sellerAccountEmail, double transactionAmount) {
         Transaction instance = new Transaction(buyerAccountEmail,sellerAccountEmail,transactionAmount);
