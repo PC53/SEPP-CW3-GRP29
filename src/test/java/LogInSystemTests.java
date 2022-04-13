@@ -1,4 +1,5 @@
 import command.*;
+import controller.Context;
 import controller.Controller;
 import logging.Logger;
 import model.*;
@@ -114,7 +115,7 @@ public class LogInSystemTests {
                 "Apple Adam",
                 "071740210000",
                 "asdfghjk",
-                "adamapple7@hotmail.co.uk",
+                "adamapple7new@hotmail.co.uk",
                 new ConsumerPreferences()));
         controller.runCommand(new LogoutCommand());
     }
@@ -138,9 +139,27 @@ public class LogInSystemTests {
         controller.runCommand(new LogoutCommand());
     }
 
+    private static void registerEntertainmentProvider1(Controller controller) {
+        controller.runCommand(new RegisterEntertainmentProviderCommand(
+                "Test Organisation",
+                "Org Avenue",
+                "testorg@gmail.com",
+                "John Doe",
+                "johndoe@gmail.com",
+                "jdoe",
+                List.of("Jane Doe", "James Doe"),
+                List.of("janedoe@gmail.com", "jamesdoe@gmail.com")
+        ));
+        controller.runCommand(new LogoutCommand());
+    }
+
+
+
     // Large test to test the logging in of different consumer's with different details.
     // also testing the logging in of consumers after their details change.
     // This may need to be split into smaller tests.
+
+    // also may need to add some assert equals to areas of the test to check if their logged in
     @Test
     void loginConsumersTest() {
         Controller controller = new Controller();
@@ -179,7 +198,93 @@ public class LogInSystemTests {
 
     }
 
-    // -----------TESTING ENTERTAINMENT REP LOGIN-----------
+    @Test
+    void checkCurrentUserIsLoggedIn() {
+        Controller controller = new Controller();
 
+        registerConsumer1(controller);
+        logoutConsumer1(controller);
+
+        loginConsumer1(controller);
+
+        LoginCommand cmd = new LoginCommand("adamapple7@hotmail.co.uk","aapple");
+        controller.runCommand(cmd);
+        User loggedUser = (User) cmd.getResult();
+
+        assertEquals("adamapple7@hotmail.co.uk", loggedUser.getEmail());
+        assertEquals("adamapple7@hotmail.co.uk", loggedUser.getPaymentAccountEmail());
+        assertEquals(true, loggedUser.checkPasswordMatch("aapple"));
+
+        controller.runCommand(new LogoutCommand());
+    }
+
+    @Test
+    void checkConsumerDetailsHaveChanged() {
+        Controller controller = new Controller();
+
+        registerConsumer1(controller);
+        logoutConsumer1(controller);
+
+        loginConsumer1(controller);
+        updateConsumer1(controller);
+
+        LoginCommand cmd = new LoginCommand("adamapple7@hotmail.co.uk","aapple");
+        controller.runCommand(cmd);
+        User loggedUser = (User) cmd.getResult();
+
+        assertEquals("adamapple7@hotmail.co.uk", loggedUser.getEmail());
+        assertEquals("adamapple7new@hotmail.co.uk", loggedUser.getPaymentAccountEmail());
+        assertEquals(true, loggedUser.checkPasswordMatch("asdfghjk"));
+
+        controller.runCommand(new LogoutCommand());
+    }
+
+    // Consumer preferences are being set incorrectly in command!!!!
+    @Test
+    void settingConsumerPreferences() {
+        Controller controller = new Controller();
+
+        registerConsumer2(controller);
+
+        loginConsumer2(controller);
+        setConsumer2Preferences(controller);
+
+        LoginCommand cmd = new LoginCommand("berny@inf.ed.ac.uk","bernyBurns");
+        controller.runCommand(cmd);
+        Consumer loggedUser = (Consumer) cmd.getResult();
+
+        ConsumerPreferences testpreferences = new ConsumerPreferences();
+        testpreferences.preferSocialDistancing = true;
+        testpreferences.preferOutdoorsOnly = true;
+        testpreferences.preferAirFiltration = true;
+        testpreferences.preferredMaxCapacity = 100;
+        testpreferences.preferredMaxVenueSize = 1000;
+
+        assertEquals(testpreferences, loggedUser.getPreferences());
+    }
+
+    // -----------TESTING ENTERTAINMENT REP LOGIN-----------
+    @Test
+    void loginEntertainmentRepresentative() {
+        Controller controller = new Controller();
+
+        registerEntertainmentProvider1(controller);
+
+        LoginCommand cmd = new LoginCommand("johndoe@gmail.com","jdoe");
+        controller.runCommand(cmd);
+        User loggedUser = (User) cmd.getResult();
+
+        assertEquals("johndoe@gmail.com", loggedUser.getEmail());
+        assertEquals("testorg@gmail.com", loggedUser.getPaymentAccountEmail());
+        assertEquals(true, loggedUser.checkPasswordMatch("jdoe"));
+    }
+
+    // ----------TESTING GOV REP LOGIN------------
+    @Test
+    void loginGovernmentRepresentative() {
+        Controller controller = new Controller();
+
+
+    }
 
 }
