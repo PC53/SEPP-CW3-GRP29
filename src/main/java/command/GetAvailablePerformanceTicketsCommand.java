@@ -23,7 +23,7 @@ public class GetAvailablePerformanceTicketsCommand extends Object implements ICo
         EventPerformance currentPerformance = currentEvent.getPerformanceByNumber(performanceNumber);
 
         if (currentPerformance != null && currentEvent != null && currentEvent instanceof TicketedEvent) {
-            // i rly dont think this is supposed to be implemented like this
+            // i dont think this is supposed to be implemented like this
             tickets = ((TicketedEvent) currentEvent).getNumTickets();
         }
     }

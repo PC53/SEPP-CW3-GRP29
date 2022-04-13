@@ -38,3 +38,4 @@ public abstract class UpdateProfileCommand extends Object implements ICommand{
         return successResult == true;
     }
 }
+//merge test

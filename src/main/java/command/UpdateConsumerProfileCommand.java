@@ -63,3 +63,5 @@ public class UpdateConsumerProfileCommand extends UpdateProfileCommand{
         }
     }
 }
+
+//merge test

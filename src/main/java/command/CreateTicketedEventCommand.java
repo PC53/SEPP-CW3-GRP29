@@ -13,7 +13,6 @@ public class CreateTicketedEventCommand extends CreateEventCommand{
                                       int numTickets,
                                       double ticketPrice,
                                       boolean requestSponsorship){
-        // not sure if the super is supposed to be here
         super(title, type);
         this.numTickets = numTickets;
         this.ticketPrice = ticketPrice;

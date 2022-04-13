@@ -9,7 +9,6 @@ public class CreateNonTicketedEventCommand extends CreateEventCommand{
 
     public CreateNonTicketedEventCommand(String title,
                                          EventType type){
-        // check: not sure if super part is correct
         super(title, type);
     }
 
