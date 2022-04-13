@@ -1,6 +1,8 @@
 package model;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public abstract class Event extends Object {
@@ -17,6 +19,7 @@ public abstract class Event extends Object {
 
 
     protected Event(long eventNumber, EntertainmentProvider organiser, String title, EventType type) {
+        this.performances = new HashMap<Long,EventPerformance>();
         this.eventNumber = eventNumber;
         this.organiser = organiser;
         this.title = title;
@@ -50,6 +53,7 @@ public abstract class Event extends Object {
     public void addPerformance(EventPerformance performance) {
         // using the performance number as a key.
         performances.put(performance.getPerformanceNumber(), performance);
+
     }
 
     public EventPerformance getPerformanceByNumber(long performanceNumber) {
@@ -57,7 +61,7 @@ public abstract class Event extends Object {
     }
 
     public Collection<EventPerformance> getPerformances() {
-        return (Collection<EventPerformance>) performances;
+        return performances.values();
     }
 
     @Override
