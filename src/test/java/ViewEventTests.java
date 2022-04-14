@@ -1,14 +1,13 @@
 import command.*;
-import controller.Context;
 import controller.Controller;
 import logging.Logger;
+import model.Event;
 import model.EventType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
-import javax.naming.ldap.Control;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +26,7 @@ public class ViewEventTests {
 
     // ----------Testing viewing events------------
     // Register test users (consumers & EPs), login test users (consumers & EPs), create events (ticketed & non ticketed),
-    // create performances, get list of events based on consumer preferences, view events (ticket availability,
+    // create performances, get list of events, view events (ticket availability,
     // event number, EP organiser, title, type, ticket price,
 
     // Registering 3 consumers
@@ -127,8 +126,94 @@ public class ViewEventTests {
         controller.runCommand(new LogoutCommand());
     }
 
+    private static void createCinemaProvider2Events (Controller controller) {
+        controller.runCommand(new RegisterEntertainmentProviderCommand(
+                "U8",
+                "middle of nowhere",
+                "dontanswer@gmail.com",
+                "nameless guy",
+                "guynoname@gmail.com",
+                "someone give me a name please",
+                List.of("overworked", "sleep deprived"),
+                List.of("overworked@gmail.com", "sleep-deprived@gmail.com")
+        ));
+
+        CreateTicketedEventCommand movie1 = new CreateTicketedEventCommand(
+                "The Eternals",
+                EventType.Movie,
+                200,
+                7.20,
+                false
+        );
+        controller.runCommand(movie1);
+        long movie1Number = movie1.getResult();
+        controller.runCommand(new AddEventPerformanceCommand(
+                movie1Number,
+                "middle of nowhere",
+                LocalDateTime.now().plusWeeks(2),
+                LocalDateTime.now().plusWeeks(2).plusHours(3),
+                Collections.emptyList(),
+                true,
+                true,
+                false,
+                150,
+                200
+        ));
+
+        CreateNonTicketedEventCommand movie2 = new CreateNonTicketedEventCommand(
+                "Movie Marathon",
+                EventType.Movie
+        );
+        controller.runCommand(movie2);
+        long movie2Number = movie2.getResult();
+        controller.runCommand(new AddEventPerformanceCommand(
+                movie2Number,
+                "Appleton Tower",
+                LocalDateTime.now().plusMonths(2),
+                LocalDateTime.now().plusMonths(2).plusDays(2),
+                List.of("a committee team"),
+                false,
+                true,
+                false,
+                550,
+                600
+        ));
+        controller.runCommand(new AddEventPerformanceCommand(
+                movie2Number,
+                "George Square",
+                LocalDateTime.now().plusMonths(1),
+                LocalDateTime.now().plusMonths(1).plusDays(2),
+                List.of("a committee team"),
+                false,
+                true,
+                false,
+                300,
+                350
+        ));
+
+        controller.runCommand(new LogoutCommand());
+    }
+
+    // get a list of events
+    private static void getListOfEvents (Controller controller) {
+        controller.runCommand(new ListEventsCommand(true, true));
+    }
+
+    // view a particular event
+    private static void getEventDetails (long eventNumber) {
+
+    }
+
     @Test
-    void getListofEvents() {
+    void viewNonTicketedEvents() {
         Controller controller = new Controller();
+        createCinemaProvider2Events(controller);
+        createMusicalProvider2Events(controller);
+        register3Consumers(controller);
+        loginConsumer1(controller);
+        ListEventsCommand cmd = new ListEventsCommand(true, true);
+        controller.runCommand(cmd);
+        List<Event> eventList = cmd.getResult();
+//        assertEquals
     }
 }
