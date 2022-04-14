@@ -1,9 +1,7 @@
 import command.*;
 import controller.Controller;
 import logging.Logger;
-import model.EventType;
-import model.SponsorshipRequest;
-import model.TicketedEvent;
+import model.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +10,10 @@ import org.junit.jupiter.api.TestInfo;
 import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CreateEventTests {
     @BeforeEach
@@ -229,7 +230,24 @@ public class CreateEventTests {
         Controller controller = new Controller();
         registerEntProvider1(controller);
         createTicketedEvent1(controller);
-        controller.runCommand(new LogoutCommand());
+
+        CreateTicketedEventCommand cmd1 = new CreateTicketedEventCommand(
+                "ticketed event one",
+                EventType.Movie,
+                9999,
+                10,
+                false
+        );
+
+        controller.runCommand(cmd1);
+        Long eventID = cmd1.getResult();
+
+        ListEventsCommand cmd2 = new ListEventsCommand(false, false);
+        controller.runCommand(cmd2);
+        List<Event> listofevents = cmd2.getResult();
+
+        assertEquals(eventID, listofevents.get(0).getEventNumber());
+
     }
 
     @Test
@@ -238,6 +256,20 @@ public class CreateEventTests {
         registerEntProvider1(controller);
         createNonTicketedEvent1(controller);
         controller.runCommand(new LogoutCommand());
+
+        CreateNonTicketedEventCommand cmd1 = new CreateNonTicketedEventCommand(
+                "non ticketed event one",
+                EventType.Movie
+        );
+
+        controller.runCommand(cmd1);
+        Long eventID = cmd1.getResult();
+
+        ListEventsCommand cmd2 = new ListEventsCommand(false, false);
+        controller.runCommand(cmd2);
+        List<Event> listofevents = cmd2.getResult();
+
+        assertEquals(eventID, listofevents.get(0).getEventNumber());
     }
 
     @Test
@@ -248,6 +280,23 @@ public class CreateEventTests {
         loginEntProvider1(controller);
         createTicketedEvent1(controller);
         controller.runCommand(new LogoutCommand());
+
+        CreateTicketedEventCommand cmd1 = new CreateTicketedEventCommand(
+                "ticketed event one",
+                EventType.Movie,
+                9999,
+                10,
+                false
+        );
+
+        controller.runCommand(cmd1);
+        Long eventID = cmd1.getResult();
+
+        ListEventsCommand cmd2 = new ListEventsCommand(false, false);
+        controller.runCommand(cmd2);
+        List<Event> listofevents = cmd2.getResult();
+
+        assertEquals(eventID, listofevents.get(0).getEventNumber());
     }
 
     @Test
@@ -256,9 +305,45 @@ public class CreateEventTests {
         registerEntProvider1(controller);
         createEventWithPerformance(controller);
         controller.runCommand(new LogoutCommand());
+
+        CreateTicketedEventCommand cmd1 = new CreateTicketedEventCommand(
+                "ticketed event one",
+                EventType.Movie,
+                9999,
+                10,
+                false
+        );
+
+        controller.runCommand(cmd1);
+        Long eventID = cmd1.getResult();
+
+        ListEventsCommand cmd2 = new ListEventsCommand(false, false);
+        controller.runCommand(cmd2);
+        List<Event> listofevents = cmd2.getResult();
+
+        ArrayList<String> performers = new ArrayList<String>();
+        performers.add("performer one");
+
+        EventPerformance performance = new EventPerformance(
+                eventID,
+                listofevents.get(0),
+                "test performance 1",
+                LocalDateTime.now().plusMonths(1),
+                LocalDateTime.now().plusMonths(1).plusHours(8),
+                performers,
+                false,
+                true,
+                true,
+                3000,
+                3000
+        );
+
+        List<EventPerformance> eventPerformances = (List<EventPerformance>) listofevents.get(0).getPerformances();
+
+        assertEquals(performance, eventPerformances.get(0));
     }
 
-    // This test is not complete!
+    // This test is not complete!!!
     @Test
     void creatingAnEventWithASponsorshipRequest () {
         Controller controller = new Controller();
@@ -274,6 +359,58 @@ public class CreateEventTests {
         registerEntProvider1(controller);
         createEventWithMultiplePerformances1(controller);
         controller.runCommand(new LogoutCommand());
+
+        CreateTicketedEventCommand cmd1 = new CreateTicketedEventCommand(
+                "ticketed event one",
+                EventType.Movie,
+                9999,
+                10,
+                false
+        );
+
+        controller.runCommand(cmd1);
+        Long eventID = cmd1.getResult();
+
+        ListEventsCommand cmd2 = new ListEventsCommand(false, false);
+        controller.runCommand(cmd2);
+        List<Event> listofevents = cmd2.getResult();
+
+        List<EventPerformance> performances = new ArrayList<EventPerformance>();
+
+        ArrayList<String> performers = new ArrayList<String>();
+        performers.add("performer one");
+
+        EventPerformance performance1 = new EventPerformance(
+                eventID,
+                listofevents.get(0),
+                "test performance 1",
+                LocalDateTime.now().plusMonths(1),
+                LocalDateTime.now().plusMonths(1).plusHours(8),
+                performers,
+                false,
+                true,
+                true,
+                3000,
+                3000
+        );
+        performances.add(performance1);
+        EventPerformance performance2 = new EventPerformance(
+                eventID,
+                listofevents.get(0),
+                "test performance 2",
+                LocalDateTime.now().plusMonths(2),
+                LocalDateTime.now().plusMonths(2).plusHours(8),
+                performers,
+                false,
+                true,
+                true,
+                3000,
+                3000
+        );
+        performances.add(performance2);
+        List<EventPerformance> eventPerformances = (List<EventPerformance>) listofevents.get(0).getPerformances();
+
+        assertEquals(performances, eventPerformances);
     }
 
     @Test
@@ -285,6 +422,32 @@ public class CreateEventTests {
         registerEntProvider2(controller);
         createNonTicketedEvent1(controller);
         controller.runCommand(new LogoutCommand());
+
+        CreateTicketedEventCommand cmd1 = new CreateTicketedEventCommand(
+                "ticketed event one",
+                EventType.Movie,
+                9999,
+                10,
+                false
+        );
+
+        CreateNonTicketedEventCommand cmd2 = new CreateNonTicketedEventCommand(
+                "non ticketed event one",
+                EventType.Movie
+        );
+
+        controller.runCommand(cmd1);
+        Long event1ID = cmd1.getResult();
+
+        controller.runCommand(cmd2);
+        Long event2ID = cmd2.getResult();
+
+        ListEventsCommand cmd3 = new ListEventsCommand(false, false);
+        controller.runCommand(cmd3);
+        List<Event> listofevents = cmd3.getResult();
+
+        assertEquals(event1ID, listofevents.get(0).getEventNumber());
+        assertEquals(event2ID, listofevents.get(1).getEventNumber());
     }
 
     @Test
@@ -296,6 +459,41 @@ public class CreateEventTests {
         registerEntProvider2(controller);
         createEventWithMultiplePerformances2(controller);
         controller.runCommand(new LogoutCommand());
+
+        // This one is gonna take ages to code...
+
+        /*
+        EventPerformance testperformance1 = new EventPerformance(
+                eventID,
+                listofevents.get(0),
+                "test performance 1",
+                LocalDateTime.now().plusMonths(1),
+                LocalDateTime.now().plusMonths(1).plusHours(8),
+                performers,
+                false,
+                true,
+                true,
+                3000,
+                3000
+        );
+
+        EventPerformance testperformance2 = new EventPerformance(
+                eventID,
+                listofevents.get(0),
+                "test performance 2",
+                LocalDateTime.now().plusMonths(1),
+                LocalDateTime.now().plusMonths(1).plusHours(8),
+                performers,
+                false,
+                true,
+                true,
+                3000,
+                3000
+        );
+
+        assertEquals();
+
+         */
     }
 
 }
