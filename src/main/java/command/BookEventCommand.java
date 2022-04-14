@@ -36,11 +36,13 @@ public class BookEventCommand extends Object implements ICommand{
                                  double amountToPay = ((TicketedEvent) event).getDiscountedTicketPrice() * numTicketsRequested;
                                  String buyerEmail = currUser.getPaymentAccountEmail();
                                  String sellerEmail = event.getOrganiser().getPaymentAccountEmail();
-                                 if(context.getPaymentSystem().processPayment(buyerEmail,sellerEmail,amountToPay)){
+
+                                booking = context
+                                        .getBookingState()
+                                        .createBooking((Consumer) currUser,performance,numTicketsRequested,amountToPay);
+
+                                if(context.getPaymentSystem().processPayment(buyerEmail,sellerEmail,amountToPay)){
                                     result = true;
-                                    booking = context
-                                                .getBookingState()
-                                                .createBooking((Consumer) currUser,performance,numTicketsRequested,amountToPay);
 
                                      // record in Entertainment provider system
                                     event.getOrganiser().getProviderSystem().recordNewBooking(
@@ -50,7 +52,10 @@ public class BookEventCommand extends Object implements ICommand{
                                             ((Consumer) currUser).getName(),
                                             currUser.getEmail(),
                                             numTicketsRequested);
-                                 }
+                                }else {
+                                    result = false;
+                                    booking.cancelPaymentFailed();
+                                }
                             }
                         }
                     }

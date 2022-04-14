@@ -1,10 +1,7 @@
 package external;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class MockEntertainmentProviderSystem extends Object implements EntertainmentProviderSystem{
 
@@ -46,7 +43,7 @@ public class MockEntertainmentProviderSystem extends Object implements Entertain
         if (ticketsAvailable.get(eventNumber) != null) {
             ticketsAvailable.remove(eventNumber);
             performancesOfEvent.remove(eventNumber);
-            Set<Long> bookingNumberSet = bookedEventNumberForBookings.keySet();
+            Set<Long> bookingNumberSet = new HashSet<Long>(bookedEventNumberForBookings.keySet());
             for (Long tempBookingNumber : bookingNumberSet) {
                 if (bookedEventNumberForBookings.get(tempBookingNumber) == eventNumber) {
                     bookedTicketsForBookings.remove(tempBookingNumber);
@@ -61,7 +58,8 @@ public class MockEntertainmentProviderSystem extends Object implements Entertain
 
     @Override
     public int getNumTicketsLeft(long eventNumber, long performanceNumber) {
-        if (performancesOfEvent.get(eventNumber).contains(performanceNumber)) {
+        List<Long> performances = performancesOfEvent.get(eventNumber);
+        if (performances!=null && performances.contains(performanceNumber)) {
             return ticketsAvailable.get(eventNumber);
         }
         return 0;
@@ -98,11 +96,15 @@ public class MockEntertainmentProviderSystem extends Object implements Entertain
 
     @Override
     public void recordNewPerformance(long eventNumber, long performanceNumber, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        if (!performancesOfEvent.get(eventNumber).contains(performanceNumber)) {
+        List<Long> performances  = performancesOfEvent.get(eventNumber); //**
+        if (performances!= null && !performances.contains(performanceNumber)) {
             performancesOfEvent.get(eventNumber).add(performanceNumber);
             System.out.print("A new performance with Performance Number " + performanceNumber + " for the event with Event Number " + eventNumber + " has been added successfully.");
             System.out.println(" The performance will start at " + startDateTime + " and end at " + endDateTime + ".");
         } else {
+            performances = new ArrayList<Long>(); //**
+            performances.add(performanceNumber); //**
+            performancesOfEvent.put(eventNumber, performances); //**
             System.out.println("A performance with the same Performance Number " + performanceNumber + " is already existed in the event with Event Number " + eventNumber + ".");
         }
     }

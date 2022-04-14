@@ -6,10 +6,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.Booking;
-import model.Event;
-import model.EventPerformance;
-import model.TicketedEvent;
+import model.*;
 
 public class GovernmentReport1Command extends Object implements ICommand{
 
@@ -38,7 +35,8 @@ public class GovernmentReport1Command extends Object implements ICommand{
                 for (Booking booking : bookings) {
                     EventPerformance ep = booking.getEventPerformance();
                     if(!ep.getStartDateTime().isBefore(intervalStartInclusive)
-                            && !ep.getEndDateTime().isAfter(intervalEndInclusive)){
+                            && !ep.getEndDateTime().isAfter(intervalEndInclusive)
+                            && booking.getStatus() == BookingStatus.Active){
                         output.add(booking);
                     }
                 }

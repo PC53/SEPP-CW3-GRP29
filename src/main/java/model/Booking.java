@@ -13,9 +13,6 @@ public class Booking extends Object {
 
     private BookingStatus status;
 
-    private EventPerformance attribute;
-    private BookingStatus attribute2;
-
 
     public Booking(long bookingNumber,
                    Consumer booker,
@@ -29,6 +26,7 @@ public class Booking extends Object {
         this.numTickets = numTickets;
         this.amountPaid = amountPaid;
         this.bookingDateTme = bookingDateTime;
+        this.status = BookingStatus.Active;
     }
 
     public long getBookingNumber() {
@@ -77,8 +75,6 @@ public class Booking extends Object {
                 ", amountPaid=" + amountPaid +
                 ", bookingDateTme=" + bookingDateTme +
                 ", status=" + status +
-                ", attribute=" + attribute +
-                ", attribute2=" + attribute2 +
                 '}';
     }
 }

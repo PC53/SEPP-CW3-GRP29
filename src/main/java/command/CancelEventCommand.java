@@ -7,12 +7,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 public class CancelEventCommand extends Object implements ICommand{
 
     private final String organiserMessage;
     private final long eventNumber;
-    private boolean performanceResult = true;
+
     private boolean result = false;
 
     public CancelEventCommand(long eventNumber,
@@ -33,6 +34,8 @@ public class CancelEventCommand extends Object implements ICommand{
 
                             Collection<EventPerformance> performances = event.getPerformances();
                             LocalDateTime now = LocalDateTime.now();
+
+                            boolean performanceResult = true;
                             for (EventPerformance performance : performances) {
                                 if (now.isAfter(performance.getStartDateTime())
                                         && now.isBefore(performance.getEndDateTime())) {
@@ -43,16 +46,18 @@ public class CancelEventCommand extends Object implements ICommand{
 
                             if(performanceResult && event instanceof TicketedEvent){
                                 if(((TicketedEvent) event).isSponsored()){
-                                    int numTickets = ((TicketedEvent) event).getNumTickets();
-                                    double discount = ((TicketedEvent) event).getOriginalTicketPrice()-((TicketedEvent)event).getDiscountedTicketPrice() ;
-                                    String govEmail = ((TicketedEvent) event).getSponsorAccountEmail();
-                                    String orgEmail = event.getOrganiser().getPaymentAccountEmail();
-                                    if(context.getPaymentSystem().processRefund(govEmail,orgEmail,discount*numTickets)){
-                                        result = true;
-                                        event.cancel();
+                                    result =  refundSponsorship(context,(TicketedEvent)event);
+                                }
+                                result = refundBookings(context,(TicketedEvent)event);
 
-                                        // record in Entertainment provider system
-                                        event.getOrganiser().getProviderSystem().cancelEvent(eventNumber,organiserMessage);
+                                if(result) {
+                                    event.cancel();
+                                    // record in Entertainment provider system
+                                    event.getOrganiser().getProviderSystem().cancelEvent(eventNumber, organiserMessage);
+
+                                    // cancel all the bookings
+                                    for (Booking booking : context.getBookingState().findBookingsByEventNumber(eventNumber)){
+                                        booking.cancelByProvider();
                                     }
 
                                 }
@@ -62,6 +67,34 @@ public class CancelEventCommand extends Object implements ICommand{
                 }
             }
         }
+    }
+
+    private boolean refundBookings(Context context,TicketedEvent event){
+        long eventNumber = event.getEventNumber();
+
+        List<Booking> bookings = context.getBookingState().findBookingsByEventNumber(eventNumber);
+
+        boolean successfulRefunds = true;
+        for(Booking booking : bookings){
+            String bookerEmail = booking.getBooker().getPaymentAccountEmail();
+            String epEmail = booking.getEventPerformance().getEvent().getOrganiser().getPaymentAccountEmail();
+            double amtPaid = booking.getAmountPaid();
+            booking.cancelByProvider();
+
+            successfulRefunds = (context.getPaymentSystem().processRefund(bookerEmail,epEmail,amtPaid));
+        }
+
+        return successfulRefunds;
+    }
+
+    private boolean refundSponsorship(Context context, TicketedEvent event){
+
+        int numTickets = event.getNumTickets();
+        double discount = event.getOriginalTicketPrice() - event.getDiscountedTicketPrice() ;
+        String govEmail = event.getSponsorAccountEmail();
+        String orgEmail = event.getOrganiser().getPaymentAccountEmail();
+
+        return (context.getPaymentSystem().processRefund(govEmail,orgEmail,discount*numTickets));
     }
 
     @Override
