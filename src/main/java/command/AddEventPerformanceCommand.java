@@ -82,6 +82,11 @@ public class AddEventPerformanceCommand extends Object implements ICommand{
                                             capacityLimit,
                                             venueSize);
                                     event.addPerformance(finalEP);
+
+                                    // record in Entertainment provider system
+                                    ((EntertainmentProvider)currUser).getProviderSystem().recordNewPerformance(
+                                            eventNumber, finalEP.getPerformanceNumber(), startDateTime,endDateTime
+                                    );
                                 }
                             }
                         }

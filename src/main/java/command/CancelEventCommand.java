@@ -50,6 +50,9 @@ public class CancelEventCommand extends Object implements ICommand{
                                     if(context.getPaymentSystem().processRefund(govEmail,orgEmail,discount*numTickets)){
                                         result = true;
                                         event.cancel();
+
+                                        // record in Entertainment provider system
+                                        event.getOrganiser().getProviderSystem().cancelEvent(eventNumber,organiserMessage);
                                     }
 
                                 }

@@ -38,7 +38,18 @@ public class BookEventCommand extends Object implements ICommand{
                                  String sellerEmail = event.getOrganiser().getPaymentAccountEmail();
                                  if(context.getPaymentSystem().processPayment(buyerEmail,sellerEmail,amountToPay)){
                                     result = true;
-                                    booking = context.getBookingState().createBooking((Consumer) currUser,performance,numTicketsRequested,amountToPay);
+                                    booking = context
+                                                .getBookingState()
+                                                .createBooking((Consumer) currUser,performance,numTicketsRequested,amountToPay);
+
+                                     // record in Entertainment provider system
+                                    event.getOrganiser().getProviderSystem().recordNewBooking(
+                                            eventNumber,
+                                            performanceNumber,
+                                            booking.getBookingNumber(),
+                                            ((Consumer) currUser).getName(),
+                                            currUser.getEmail(),
+                                            numTicketsRequested);
                                  }
                             }
                         }

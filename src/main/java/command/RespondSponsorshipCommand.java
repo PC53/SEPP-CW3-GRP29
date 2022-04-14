@@ -25,10 +25,20 @@ public class RespondSponsorshipCommand extends Object implements ICommand{
             if((0<=percentToSponsor)&&(percentToSponsor<=100)){
                 SponsorshipRequest sr = context.getSponsorshipState().findRequestByNumber(requestNumber);
                 if(sr != null){
+                    long eventNumber = sr.getEvent().getEventNumber();
+
                     if(sr.getStatus().equals(SponsorshipStatus.PENDING)){
-                        if(percentToSponsor == 0) sr.reject();
+                        if(percentToSponsor == 0) {
+                            sr.reject();
+                            // record in Entertainment provider system
+                            sr.getEvent().getOrganiser().getProviderSystem().recordSponsorshipRejection(eventNumber);
+                        }
                         else {
                             sr.accept(percentToSponsor, user.getPaymentAccountEmail());
+                            // record in Entertainment provider system
+                            sr.getEvent().getOrganiser().getProviderSystem()
+                                    .recordSponsorshipAcceptance(eventNumber,percentToSponsor);
+
                             double amtToPay = (sr.getEvent().getNumTickets() * (float)percentToSponsor) / 100;
                             String sponsorEmail = sr.getSponsorAccountEmail();
                             String organiserEmail = sr.getEvent().getOrganiser().getPaymentAccountEmail();

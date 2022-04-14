@@ -2,10 +2,8 @@ package command;
 
 import controller.Context;
 import logging.Logger;
-import model.Booking;
-import model.BookingStatus;
-import model.Consumer;
-import model.User;
+import model.*;
+
 import java.time.Duration;
 
 import java.time.LocalDateTime;
@@ -40,10 +38,15 @@ public class CancelBookingCommand extends Object implements ICommand{
                             // the payment system refund succeeds
                             String buyerEmail = booker.getPaymentAccountEmail();
                             double amountPaid = booking.getAmountPaid();
-                            String sellerEmail = booking.getEventPerformance().getEvent().getOrganiser().getPaymentAccountEmail();
+                            EntertainmentProvider ep = booking.getEventPerformance().getEvent().getOrganiser();
+                            String sellerEmail = ep.getPaymentAccountEmail();
                             if(context.getPaymentSystem().processRefund(buyerEmail,sellerEmail,amountPaid)){
                                 this.result = true;
                                 booking.cancelByConsumer();
+
+                                // record in Entertainment provider system
+                                ep.getProviderSystem().cancelBooking(bookingNumber);
+
                             }
 
                         }
