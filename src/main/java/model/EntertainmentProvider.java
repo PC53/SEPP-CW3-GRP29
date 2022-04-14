@@ -16,6 +16,7 @@ public class EntertainmentProvider extends User{
     private String mainRepEmail;
     private List<String> otherRepNames;
     private List<String> otherRepEmails;
+    private EntertainmentProviderSystem epSystem;
 
 
     public EntertainmentProvider(String orgName,
@@ -35,6 +36,7 @@ public class EntertainmentProvider extends User{
         this.mainRepEmail = mainRepEmail;
         this.otherRepNames = otherRepNames;
         this.otherRepEmails = otherRepEmails;
+        this.epSystem = new MockEntertainmentProviderSystem(orgName, orgAddress);
     }
 
     public void addEvent(Event event) {
@@ -76,8 +78,7 @@ public class EntertainmentProvider extends User{
     }
 
     public EntertainmentProviderSystem getProviderSystem() {
-        //this may need to take other parameters in the future
-        return new MockEntertainmentProviderSystem(orgName, orgAddress);
+        return epSystem;
     }
 
     @Override
