@@ -40,11 +40,10 @@ public class UpdateConsumerProfileCommand extends UpdateProfileCommand{
         Map<String, User> allUsers = generalUserState.getAllUsers();
         User currentUser = generalUserState.getCurrentUser();
 
-        if (oldPassword != null && newName != null && newEmail != null && newPhoneNumber != null && newPassword != null && newPaymentAccountEmail != null
-                && newPreferences != null && currentUser != null && currentUser.checkPasswordMatch(oldPassword) && (currentUser instanceof Consumer)) {
+        if (currentUser.checkPasswordMatch(oldPassword) && (currentUser instanceof Consumer)) {
             boolean uniqueEmail = true;
             for (String userEmail : allUsers.keySet()) {
-                if (userEmail.equals(newEmail)) {
+                if (userEmail.equals(newEmail) &&  !(userEmail.equals(currentUser.getEmail()))) {
                     uniqueEmail = false;
                     break;
                 }
