@@ -3,6 +3,7 @@ package command;
 import controller.Context;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import model.Booking;
@@ -20,6 +21,7 @@ public class GovernmentReport1Command extends Object implements ICommand{
                                     LocalDateTime intervalEndInclusive){
         this.intervalStartInclusive = intervalStartInclusive;
         this.intervalEndInclusive = intervalEndInclusive;
+        this.output = new ArrayList<Booking>();
     }
 
     @Override
@@ -37,7 +39,7 @@ public class GovernmentReport1Command extends Object implements ICommand{
                     EventPerformance ep = booking.getEventPerformance();
                     if(!ep.getStartDateTime().isBefore(intervalStartInclusive)
                             && !ep.getEndDateTime().isAfter(intervalEndInclusive)){
-                        bookings.add(booking);
+                        output.add(booking);
                     }
                 }
             }
