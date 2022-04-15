@@ -32,6 +32,7 @@ public class RespondSponsorshipCommand extends Object implements ICommand{
                             sr.reject();
                             // record in Entertainment provider system
                             sr.getEvent().getOrganiser().getProviderSystem().recordSponsorshipRejection(eventNumber);
+                            result = true;
                         }
                         else {
                             sr.accept(percentToSponsor, user.getPaymentAccountEmail());

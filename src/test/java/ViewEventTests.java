@@ -1,16 +1,17 @@
 import command.*;
 import controller.Controller;
 import logging.Logger;
-import model.Event;
-import model.EventType;
+import model.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ViewEventTests {
     @BeforeEach
@@ -29,191 +30,213 @@ public class ViewEventTests {
     // create performances, get list of events, view events (ticket availability,
     // event number, EP organiser, title, type, ticket price,
 
-    // Registering 3 consumers
-    private static void register3Consumers(Controller controller) {
+    private static void registerConsumer(Controller controller) {
         controller.runCommand(new RegisterConsumerCommand(
-                "Ayato Kamisato",
-                "ayato@gmail.com",
-                "0723478190",
-                "Olderw@t3rd0dE",
-                "ayato@gmail.com"
-        ));
-        controller.runCommand(new LogoutCommand());
-        controller.runCommand(new RegisterConsumerCommand(
-                "Yan Fei",
-                "yanfei88@ed.ac.uk",
-                "0119378525",
-                "F1reL@wLady",
-                "yanfei@yahoo.com"
-        ));
-        controller.runCommand(new LogoutCommand());
-        controller.runCommand(new RegisterConsumerCommand(
-                "Childe Tartaglia",
-                "ajax@hotmail.com",
-                "0294718741",
-                "Hydr0 boii1ii",
-                "ajax@hotmail.com"
+                "Indiana Jones",
+                "indianajones@gmail.com",
+                "0779238472",
+                "i am the main character",
+                "indianajones@gmail.com"
         ));
         controller.runCommand(new LogoutCommand());
     }
 
-    // Consumer log ins
-    private static void loginConsumer1(Controller controller) {
-        controller.runCommand(new LoginCommand("ayato@gmail.com", "Olderw@t3rd0dE"));
-    }
+    private static void registerEntertainmentProvider(Controller controller) {
+        ArrayList<String> orgReps = new ArrayList<>();
+        orgReps.add("Jane Org");
+        orgReps.add("Josh Org");
+        ArrayList<String> orgRepsEmails = new ArrayList<>();
+        orgRepsEmails.add("janeorg@gmail.com");
+        orgRepsEmails.add("joshorg@gmail.com");
 
-    private static void loginConsumer2 (Controller controller) {
-        controller.runCommand(new LoginCommand("yanfei@ed.ac.uk", "F1reL@wLady"));
-    }
-
-    private static void loginConsumer3 (Controller controller) {
-        controller.runCommand(new LoginCommand("ajax@hotmail.com", "Hydr0 boii1ii"));
-    }
-
-    // Create non ticketed event and ticketed event
-    private static void createMusicalProvider2Events (Controller controller) {
         controller.runCommand(new RegisterEntertainmentProviderCommand(
-                "UoE Theatre Committee",
-                "Summerhall",
-                "eusasocieties@gmail.com",
-                "John Jones",
-                "jj123@hotmail.com",
-                "indiana jone's brother",
-                Collections.emptyList(),
-                Collections.emptyList()
+                "Trial Entertainment Org",
+                "middle of nowhere",
+                "i-am-broke@gmail.com",
+                "Im Quitting",
+                "jobless@gmail.com",
+                "i question life choices",
+                orgReps,
+                orgRepsEmails
         ));
-        CreateTicketedEventCommand event1 = new CreateTicketedEventCommand(
-                "Dear Evan Hansen",
+    }
+
+    private static void arrangeTicketedEvent(Controller controller) {
+        controller.runCommand(new CreateTicketedEventCommand(
+                "Hamilton Musical",
                 EventType.Theatre,
+                300,
+                15,
+                false
+        ));
+    }
+
+    private static void arrangeNonTicketedEvent(Controller controller) {
+        controller.runCommand(new CreateNonTicketedEventCommand(
+                "Charity Run",
+                EventType.Sports
+        ));
+    }
+
+    private static void arrangeTicketedEvent1Performance(Controller controller) {
+        CreateTicketedEventCommand eventCmd = new CreateTicketedEventCommand(
+                "Movie Marathons",
+                EventType.Movie,
                 200,
-                13.82,
+                10,
                 false
         );
-        controller.runCommand(event1);
-        long event1Number = event1.getResult();
-        controller.runCommand(new AddEventPerformanceCommand(
-                event1Number,
-                "Castle in the sky",
-                LocalDateTime.now().plusWeeks(1),
-                LocalDateTime.now().plusWeeks(1).plusHours(2),
-                Collections.emptyList(),
-                true,
+        controller.runCommand(eventCmd);
+        long eventNumber = eventCmd.getResult();
+
+        ArrayList<String> performers = new ArrayList<>();
+        performers.add("workers");
+        AddEventPerformanceCommand performanceCmd = new AddEventPerformanceCommand(
+                eventNumber,
+                "Howl's Moving Castle",
+                LocalDateTime.now().plusMonths(1),
+                LocalDateTime.now().plusMonths(1).plusHours(3),
+                performers,
+                false,
                 true,
                 false,
-                200,
-                300
-        ));
-
-        CreateNonTicketedEventCommand event2 = new CreateNonTicketedEventCommand(
-                "I dont know the name",
-                EventType.Theatre
+                250,
+                250
         );
-        controller.runCommand(event2);
-        long event2Number = event2.getResult();
-        controller.runCommand(new AddEventPerformanceCommand(
-                event2Number,
-                "River Styx",
-                LocalDateTime.now().minusDays(3),
-                LocalDateTime.now().minusDays(3).plusHours(4),
-                List.of("stranger 1", "stranger 2"),
+        controller.runCommand(performanceCmd);
+//        long performaneNumber = performanceCmd.getResult().getPerformanceNumber();
+    }
+
+    private static void arrangeNonTicketedEvent2Performance(Controller controller) {
+        CreateNonTicketedEventCommand eventCmd = new CreateNonTicketedEventCommand(
+                "Busking Event",
+                EventType.Music
+        );
+        controller.runCommand(eventCmd);
+        long eventNum = eventCmd.getResult();
+
+        ArrayList<String> performers = new ArrayList<>();
+        performers.add("Singers");
+        performers.add("Musicians");
+        AddEventPerformanceCommand performanceCmd1 = new AddEventPerformanceCommand(
+                eventNum,
+                "Bristol Square",
+                LocalDateTime.now().plusWeeks(2),
+                LocalDateTime.now().plusWeeks(2).plusHours(5),
+                performers,
                 false,
                 false,
                 true,
                 500,
-                560
-        ));
-
-        controller.runCommand(new LogoutCommand());
-    }
-
-    private static void createCinemaProvider2Events (Controller controller) {
-        controller.runCommand(new RegisterEntertainmentProviderCommand(
-                "U8",
-                "middle of nowhere",
-                "dontanswer@gmail.com",
-                "nameless guy",
-                "guynoname@gmail.com",
-                "someone give me a name please",
-                List.of("overworked", "sleep deprived"),
-                List.of("overworked@gmail.com", "sleep-deprived@gmail.com")
-        ));
-
-        CreateTicketedEventCommand movie1 = new CreateTicketedEventCommand(
-                "The Eternals",
-                EventType.Movie,
-                200,
-                7.20,
-                false
+                500
         );
-        controller.runCommand(movie1);
-        long movie1Number = movie1.getResult();
-        controller.runCommand(new AddEventPerformanceCommand(
-                movie1Number,
-                "middle of nowhere",
-                LocalDateTime.now().plusWeeks(2),
-                LocalDateTime.now().plusWeeks(2).plusHours(3),
-                Collections.emptyList(),
-                true,
-                true,
-                false,
-                150,
-                200
-        ));
+        controller.runCommand(performanceCmd1);
 
-        CreateNonTicketedEventCommand movie2 = new CreateNonTicketedEventCommand(
-                "Movie Marathon",
-                EventType.Movie
+        AddEventPerformanceCommand performanceCmd2 = new AddEventPerformanceCommand(
+                eventNum,
+                "The Meadows",
+                LocalDateTime.now().plusWeeks(1),
+                LocalDateTime.now().plusWeeks(1).plusHours(2),
+                performers,
+                false,
+                false,
+                true,
+                1000,
+                1000
         );
-        controller.runCommand(movie2);
-        long movie2Number = movie2.getResult();
-        controller.runCommand(new AddEventPerformanceCommand(
-                movie2Number,
-                "Appleton Tower",
-                LocalDateTime.now().plusMonths(2),
-                LocalDateTime.now().plusMonths(2).plusDays(2),
-                List.of("a committee team"),
-                false,
-                true,
-                false,
-                550,
-                600
-        ));
-        controller.runCommand(new AddEventPerformanceCommand(
-                movie2Number,
-                "George Square",
-                LocalDateTime.now().plusMonths(1),
-                LocalDateTime.now().plusMonths(1).plusDays(2),
-                List.of("a committee team"),
-                false,
-                true,
-                false,
-                300,
-                350
-        ));
-
-        controller.runCommand(new LogoutCommand());
-    }
-
-    // get a list of events
-    private static void getListOfEvents (Controller controller) {
-        controller.runCommand(new ListEventsCommand(true, true));
-    }
-
-    // view a particular event
-    private static void getEventDetails (long eventNumber) {
-
+        controller.runCommand(performanceCmd2);
     }
 
     @Test
-    void viewNonTicketedEvents() {
+    void viewNonTicketedEvent() {
         Controller controller = new Controller();
-        createCinemaProvider2Events(controller);
-        createMusicalProvider2Events(controller);
-        register3Consumers(controller);
-        loginConsumer1(controller);
-        ListEventsCommand cmd = new ListEventsCommand(true, true);
+        registerEntertainmentProvider(controller);
+        arrangeNonTicketedEvent(controller);
+        controller.runCommand(new LogoutCommand());
+        registerConsumer(controller);
+        ListEventsCommand cmd = new ListEventsCommand(false, false);
         controller.runCommand(cmd);
         List<Event> eventList = cmd.getResult();
-//        assertEquals
+        Event nonTickedEvent = eventList.get(0);
+        assertEquals("Charity Run", nonTickedEvent.getTitle());
+        assertEquals(EventType.Sports, nonTickedEvent.getType());
     }
+
+    @Test
+    void viewTicketNumber() {
+        Controller controller = new Controller();
+        registerEntertainmentProvider(controller);
+        arrangeTicketedEvent(controller);
+        controller.runCommand(new LogoutCommand());
+        registerConsumer(controller);
+        ListEventsCommand cmd = new ListEventsCommand(false, true);
+        controller.runCommand(cmd);
+        List<Event> eventList = cmd.getResult();
+        TicketedEvent ticketedEvent = (TicketedEvent) eventList.get(0);
+        int tickets = ticketedEvent.getNumTickets();
+        assertEquals(300, tickets);
+    }
+
+    @Test
+    void viewTicketedEvent() {
+        Controller controller = new Controller();
+        registerEntertainmentProvider(controller);
+        arrangeTicketedEvent(controller);
+        controller.runCommand(new LogoutCommand());
+        registerConsumer(controller);
+        ListEventsCommand cmd = new ListEventsCommand(false, true);
+        controller.runCommand(cmd);
+        List<Event> eventList = cmd.getResult();
+        TicketedEvent ticketedEvent = (TicketedEvent) eventList.get(0);
+
+        assertEquals("Hamilton Musical", ticketedEvent.getTitle());
+
+    }
+
+//    @Test
+//    void viewEventDetails1() {
+//        Controller controller = new Controller();
+//        createMusicalProvider2Events(controller);
+//        register3Consumers(controller);
+//        loginConsumer1(controller);
+//        ListEventsCommand cmd = new ListEventsCommand(false, false);
+//        controller.runCommand(cmd);
+//        List<Event> eventList = cmd.getResult();
+//        Event event1 = eventList.get(0);
+//        Collection<EventPerformance> performanceList = event1.getPerformances();
+//        System.out.println(performanceList.toString());
+//
+//
+//        assertEquals("Dear Evan Hansen", event1.getTitle());
+//        assertEquals(1, event1.getEventNumber());
+//        assertEquals(EventType.Theatre, event1.getType());
+//        assertEquals("UoE Theatre Committee",event1.getOrganiser().getOrgName());
+//        assertEquals("Summerhall", event1.getOrganiser().getOrgAddress());
+//        assertEquals();
+//    }
+
+//    @Test
+//    void viewEventDetails() {
+//        Controller controller = new Controller();
+//        createMusicalProvider2Events(controller);
+//        register3Consumers(controller);
+//        loginConsumer1(controller);
+//        ListEventsCommand cmd = new ListEventsCommand(false, true);
+//        controller.runCommand(cmd);
+//        List<Event> eventList = cmd.getResult();
+//        Event event1 = eventList.get(0);
+//        long eventNumber = event1.getEventNumber();
+//        EntertainmentProvider oraniser = event1.getOrganiser();
+//        String title = event1.getTitle();
+//        EventType eventType = event1.getType();
+//        Collection<EventPerformance> eventPerformances = event1.getPerformances();
+////        int numberOfTickets = (TicketedEvent) event1.
+//
+//        assertEquals(1, eventNumber);
+////        assertEquals("UoE Theatre Committee", oraniser);
+//        assertEquals("Dear Evan Hansen", title);
+//        assertEquals(EventType.Theatre, eventType);
+////        assertEquals(Collections.emptyList(), eventPerformances);
+//
+//    }
 }

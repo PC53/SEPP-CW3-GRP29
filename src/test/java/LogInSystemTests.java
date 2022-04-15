@@ -239,7 +239,6 @@ public class LogInSystemTests {
         controller.runCommand(new LogoutCommand());
     }
 
-    // Consumer preferences are being set incorrectly in command!!!!
     @Test
     void settingConsumerPreferences() {
         Controller controller = new Controller();
@@ -260,7 +259,11 @@ public class LogInSystemTests {
         testpreferences.preferredMaxCapacity = 100;
         testpreferences.preferredMaxVenueSize = 1000;
 
-        assertEquals(testpreferences, loggedUser.getPreferences());
+        assertEquals(testpreferences.preferSocialDistancing, loggedUser.getPreferences().preferSocialDistancing);
+        assertEquals(testpreferences.preferOutdoorsOnly, loggedUser.getPreferences().preferOutdoorsOnly);
+        assertEquals(testpreferences.preferAirFiltration, loggedUser.getPreferences().preferAirFiltration);
+        assertEquals(testpreferences.preferredMaxCapacity, loggedUser.getPreferences().preferredMaxCapacity);
+        assertEquals(testpreferences.preferredMaxVenueSize, loggedUser.getPreferences().preferredMaxVenueSize);
     }
 
     // -----------TESTING ENTERTAINMENT REP LOGIN-----------
@@ -284,7 +287,14 @@ public class LogInSystemTests {
     void loginGovernmentRepresentative() {
         Controller controller = new Controller();
 
+        LoginCommand cmd = new LoginCommand("margaret.thatcher@gov.uk", "The Good times  ");
+        controller.runCommand(cmd);
+        GovernmentRepresentative govRep = (GovernmentRepresentative) cmd.getResult();
 
+        assertEquals(true, govRep.checkPasswordMatch("The Good times  "));
+        assertEquals("margaret.thatcher@gov.uk", govRep.getEmail());
+
+        controller.runCommand(new LogoutCommand());
     }
 
 }

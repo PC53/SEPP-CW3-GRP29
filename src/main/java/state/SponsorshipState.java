@@ -1,6 +1,8 @@
 package state;
 
+import model.EventStatus;
 import model.SponsorshipRequest;
+import model.SponsorshipStatus;
 import model.TicketedEvent;
 
 import java.util.ArrayList;
@@ -50,7 +52,7 @@ public class SponsorshipState extends Object implements ISponsorshipState{
     public List<SponsorshipRequest> getPendingSponsorshipRequests() {
         List<SponsorshipRequest> PendingSponsorshipRequests = new ArrayList<>();
         for (int i = 0; i < sponsorshipRequests.size(); i++) {
-            if (Objects.equals(sponsorshipRequests.get(i).getStatus(), false)) { // false -> SponsorshipState.PENDING
+            if (Objects.equals(sponsorshipRequests.get(i).getStatus(), SponsorshipStatus.PENDING)) {
                 PendingSponsorshipRequests.add(sponsorshipRequests.get(i));
             }
         }
