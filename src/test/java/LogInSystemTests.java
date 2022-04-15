@@ -187,7 +187,7 @@ public class LogInSystemTests {
         loginConsumer1(controller);
         updateConsumer1(controller);
         controller.runCommand(new LogoutCommand());
-        loginConsumer1(controller);
+        LoginCommand cmd = new LoginCommand("adamapple7new@hotmail.co.uk", "asdfghjk");
         controller.runCommand(new LogoutCommand());
 
         // setting consumer preferences then relogging in
