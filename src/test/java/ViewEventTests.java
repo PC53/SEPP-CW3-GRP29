@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -80,7 +82,7 @@ public class ViewEventTests {
 
     private static void arrangeTicketedEvent1Performance(Controller controller) {
         CreateTicketedEventCommand eventCmd = new CreateTicketedEventCommand(
-                "Movie Marathons",
+                "Movie Marathon",
                 EventType.Movie,
                 200,
                 10,
@@ -163,7 +165,7 @@ public class ViewEventTests {
     }
 
     @Test
-    void viewTicketNumber() {
+    void viewAvailableTicketNumber() {
         Controller controller = new Controller();
         registerEntertainmentProvider(controller);
         arrangeTicketedEvent(controller);
@@ -190,53 +192,68 @@ public class ViewEventTests {
         TicketedEvent ticketedEvent = (TicketedEvent) eventList.get(0);
 
         assertEquals("Hamilton Musical", ticketedEvent.getTitle());
-
+        assertEquals(EventType.Theatre, ticketedEvent.getType());
+        assertEquals(300, ticketedEvent.getNumTickets());
+        assertEquals(15, ticketedEvent.getOriginalTicketPrice());
+        assertEquals(false, ticketedEvent.isSponsored());
+        assertEquals("Trial Entertainment Org", ticketedEvent.getOrganiser().getOrgName());
+        assertEquals("middle of nowhere", ticketedEvent.getOrganiser().getOrgAddress());
     }
 
-//    @Test
-//    void viewEventDetails1() {
-//        Controller controller = new Controller();
-//        createMusicalProvider2Events(controller);
-//        register3Consumers(controller);
-//        loginConsumer1(controller);
-//        ListEventsCommand cmd = new ListEventsCommand(false, false);
-//        controller.runCommand(cmd);
-//        List<Event> eventList = cmd.getResult();
-//        Event event1 = eventList.get(0);
-//        Collection<EventPerformance> performanceList = event1.getPerformances();
-//        System.out.println(performanceList.toString());
-//
-//
-//        assertEquals("Dear Evan Hansen", event1.getTitle());
-//        assertEquals(1, event1.getEventNumber());
-//        assertEquals(EventType.Theatre, event1.getType());
-//        assertEquals("UoE Theatre Committee",event1.getOrganiser().getOrgName());
-//        assertEquals("Summerhall", event1.getOrganiser().getOrgAddress());
-//        assertEquals();
-//    }
+    @Test
+    void viewPerformanceDetails() {
+        Controller controller = new Controller();
+        registerEntertainmentProvider(controller);
+        arrangeTicketedEvent1Performance(controller);
+        controller.runCommand(new LogoutCommand());
+        registerConsumer(controller);
+        ListEventsCommand cmd = new ListEventsCommand(false, true);
+        controller.runCommand(cmd);
+        List<Event> eventList = cmd.getResult();
+        TicketedEvent ticketedEvent = (TicketedEvent) eventList.get(0);
+        Collection<EventPerformance> performanceList = ticketedEvent.getPerformances();
+        EventPerformance performance1 = ticketedEvent.getPerformanceByNumber(1);
 
-//    @Test
-//    void viewEventDetails() {
-//        Controller controller = new Controller();
-//        createMusicalProvider2Events(controller);
-//        register3Consumers(controller);
-//        loginConsumer1(controller);
-//        ListEventsCommand cmd = new ListEventsCommand(false, true);
-//        controller.runCommand(cmd);
-//        List<Event> eventList = cmd.getResult();
-//        Event event1 = eventList.get(0);
-//        long eventNumber = event1.getEventNumber();
-//        EntertainmentProvider oraniser = event1.getOrganiser();
-//        String title = event1.getTitle();
-//        EventType eventType = event1.getType();
-//        Collection<EventPerformance> eventPerformances = event1.getPerformances();
-////        int numberOfTickets = (TicketedEvent) event1.
-//
-//        assertEquals(1, eventNumber);
-////        assertEquals("UoE Theatre Committee", oraniser);
-//        assertEquals("Dear Evan Hansen", title);
-//        assertEquals(EventType.Theatre, eventType);
-////        assertEquals(Collections.emptyList(), eventPerformances);
-//
-//    }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm a");
+
+        assertEquals(1, performance1.getPerformanceNumber());
+        assertEquals(LocalDateTime.now().plusMonths(1).plusHours(3).format(formatter), performance1.getEndDateTime().format(formatter));
+        assertEquals(LocalDateTime.now().plusMonths(1).format(formatter), performance1.getStartDateTime().format(formatter));
+        assertEquals(ticketedEvent, performance1.getEvent());
+        assertEquals(false, performance1.hasSocialDistancing());
+        assertEquals(true, performance1.hasAirFiltration());
+        assertEquals(false, performance1.isOutdoors());
+        assertEquals(250, performance1.getCapacityLimit());
+        assertEquals(250, performance1.getVenueSize());
+    }
+
+    @Test
+    void viewListOfPerformances() {
+        Controller controller = new Controller();
+        registerEntertainmentProvider(controller);
+        arrangeNonTicketedEvent2Performance(controller);
+        controller.runCommand(new LogoutCommand());
+        registerConsumer(controller);
+        ListEventsCommand cmd = new ListEventsCommand(false, true);
+        controller.runCommand(cmd);
+        List<Event> eventList = cmd.getResult();
+//        NonTicketedEvent event = (NonTicketedEvent) eventList.get(0);
+//        Collection<EventPerformance> performanceList = event.getPerformances();
+//        EventPerformance performance1 = (EventPerformance) performanceList.toArray()[0];
+//        EventPerformance performance2 = (EventPerformance) performanceList.toArray()[1];
+
+        assertEquals(null, eventList);
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm a");
+
+//        assertEquals(1, performance1.getPerformanceNumber());
+//        assertEquals(2, performance2.getPerformanceNumber());
+//        assertEquals(1, performance1.getEvent());
+//        assertEquals(1, performance2.getEvent());
+//        assertEquals(LocalDateTime.now().plusWeeks(2).format(formatter), performance1.getStartDateTime().format(formatter));
+//        assertEquals(LocalDateTime.now().plusWeeks(2).plusHours(5).format(formatter), performance1.getEndDateTime().format(formatter));
+//        assertEquals(LocalDateTime.now().plusWeeks(1).format(formatter), performance2.getStartDateTime().format(formatter));
+//        assertEquals(LocalDateTime.now().plusWeeks(1).plusHours(2).format(formatter), performance2.getEndDateTime().format(formatter));
+    }
+
+
 }
