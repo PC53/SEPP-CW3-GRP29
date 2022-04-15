@@ -101,10 +101,14 @@ public class MockEntertainmentProviderSystem extends Object implements Entertain
             performancesOfEvent.get(eventNumber).add(performanceNumber);
             System.out.print("A new performance with Performance Number " + performanceNumber + " for the event with Event Number " + eventNumber + " has been added successfully.");
             System.out.println(" The performance will start at " + startDateTime + " and end at " + endDateTime + ".");
-        } else {
+        }
+        else if (performances == null) {
             performances = new ArrayList<Long>(); //**
             performances.add(performanceNumber); //**
             performancesOfEvent.put(eventNumber, performances); //**
+            System.out.print("A new performance with Performance Number " + performanceNumber + " for the event with Event Number " + eventNumber + " has been added successfully.");
+            System.out.println(" The performance will start at " + startDateTime + " and end at " + endDateTime + ".");
+        } else {
             System.out.println("A performance with the same Performance Number " + performanceNumber + " is already existed in the event with Event Number " + eventNumber + ".");
         }
     }
