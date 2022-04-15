@@ -29,11 +29,11 @@ public class RegisterConsumerCommand extends Object implements ICommand{
 
     @Override
     public void execute(Context context) {
-        if (name != null
-                && email != null
-                && phone != null
-                && password != null
-                && paymentAccountEmail != null)
+        if (name != null && !name.equals("")
+                && email != null && !email.equals("")
+                && phone != null && !phone.equals("")
+                && password != null && !password.equals("")
+                && paymentAccountEmail != null && !paymentAccountEmail.equals(""))
         {
             Map<String, User> users = context.getUserState().getAllUsers();
 
