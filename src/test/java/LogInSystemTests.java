@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 public class LogInSystemTests {
@@ -110,8 +111,8 @@ public class LogInSystemTests {
 
     private static void updateConsumer1(Controller controller) {
         controller.runCommand(new UpdateConsumerProfileCommand(
-                "aaple",
-                "adamapple7@hotmail.co.uk",
+                "aapple",
+                "adamapple7new@hotmail.co.uk",
                 "Apple Adam",
                 "071740210000",
                 "asdfghjk",
@@ -219,16 +220,29 @@ public class LogInSystemTests {
     }
 
     @Test
-    void checkConsumerDetailsHaveChanged() {
+    void checkConsumerCanChangePassword() {
         Controller controller = new Controller();
 
         registerConsumer1(controller);
         logoutConsumer1(controller);
 
         loginConsumer1(controller);
-        updateConsumer1(controller);
+        ///updateConsumer1(controller);
 
-        LoginCommand cmd = new LoginCommand("adamapple7@hotmail.co.uk","aapple");
+        UpdateConsumerProfileCommand cmd0 = new UpdateConsumerProfileCommand(
+                "aapple",
+                "adamapple7@hotmail.co.uk",
+                "Apple Adam",
+                "071740210000",
+                "asdfghjk",
+                "adamapple7new@hotmail.co.uk",
+                new ConsumerPreferences()
+        );
+        controller.runCommand(cmd0);
+
+        controller.runCommand(new LogoutCommand());
+
+        LoginCommand cmd = new LoginCommand("adamapple7@hotmail.co.uk","asdfghjk");
         controller.runCommand(cmd);
         User loggedUser = (User) cmd.getResult();
 
@@ -238,6 +252,44 @@ public class LogInSystemTests {
 
         controller.runCommand(new LogoutCommand());
     }
+
+    @Test
+    void updatingConsumerEmail() {
+        Controller controller = new Controller();
+
+        registerConsumer1(controller);
+        logoutConsumer1(controller);
+
+        loginConsumer1(controller);
+        ///updateConsumer1(controller);
+
+        UpdateConsumerProfileCommand cmd0 = new UpdateConsumerProfileCommand(
+                "aapple",
+                "adamapple7new@hotmail.co.uk",
+                "Apple Adam",
+                "071740210000",
+                "aapple",
+                "adamapple7new@hotmail.co.uk",
+                new ConsumerPreferences()
+        );
+        controller.runCommand(cmd0);
+        boolean success = (boolean) cmd0.getResult();
+        assertTrue(success);
+
+        controller.runCommand(new LogoutCommand());
+
+        LoginCommand cmd = new LoginCommand("adamapple7new@hotmail.co.uk","aapple");
+        controller.runCommand(cmd);
+        User loggedUser = (User) cmd.getResult();
+
+        assertEquals("adamapple7new@hotmail.co.uk", loggedUser.getEmail());
+        assertEquals("adamapple7new@hotmail.co.uk", loggedUser.getPaymentAccountEmail());
+        assertEquals(true, loggedUser.checkPasswordMatch("aapple"));
+
+        controller.runCommand(new LogoutCommand());
+    }
+
+    // Need to to check that updated password has been encrypted.
 
     @Test
     void settingConsumerPreferences() {

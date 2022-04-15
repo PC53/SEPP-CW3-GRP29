@@ -43,18 +43,31 @@ public class UpdateConsumerProfileCommand extends UpdateProfileCommand{
         if (currentUser.checkPasswordMatch(oldPassword) && (currentUser instanceof Consumer)) {
             boolean uniqueEmail = true;
             for (String userEmail : allUsers.keySet()) {
-                if (userEmail.equals(newEmail) &&  !(userEmail.equals(currentUser.getEmail()))) {
+                if (userEmail.equals(newEmail) && !(userEmail.equals(currentUser.getEmail()))) {
                     uniqueEmail = false;
                     break;
                 }
             }
             if (uniqueEmail) {
+                // need to delete element from hashmap and replace with this new 1
+                allUsers.remove(currentUser.getEmail());
+                Consumer temp = new Consumer(
+                        newName,
+                        newEmail,
+                        newPhoneNumber,
+                        newPassword,
+                        newPaymentAccountEmail
+                );
+                temp.setPreferences(newPreferences);
+                allUsers.put(newEmail, temp);
+                /*
                 ((Consumer) currentUser).setName(newName);
                 ((Consumer) currentUser).setEmail(newEmail);
                 ((Consumer) currentUser).setPhoneNumber(newPhoneNumber);
                 ((Consumer) currentUser).updatePassword(newPassword);
                 ((Consumer) currentUser).setPaymentAccountEmail(newPaymentAccountEmail);
                 ((Consumer) currentUser).setPreferences(newPreferences);
+                 */
                 super.successResult = true;
             } else {
                 super.successResult = false;

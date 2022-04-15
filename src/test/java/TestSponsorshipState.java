@@ -44,6 +44,7 @@ public class TestSponsorshipState {
         );
 
         testSS.addSponsorshipRequest(te);
+
     }
 
    @Test
@@ -303,5 +304,60 @@ public class TestSponsorshipState {
         assertEquals(te2, testSS.getPendingSponsorshipRequests().get(1).getEvent());
         assertEquals(te3, testSS.getPendingSponsorshipRequests().get(2).getEvent());
     }
+
+    @Test
+    @DisplayName("Testing to check if a non pending request is excluded")
+    void getPendingSponsorRequests2() {
+        SponsorshipState testSS = new SponsorshipState();
+
+        EntertainmentProvider ep = new EntertainmentProvider(
+                "test org",
+                "org road",
+                "testorg@gmail.com",
+                "mr org",
+                "mrorg@gmail.com",
+                "orgsorgsorgs",
+                new ArrayList<String>(),
+                new ArrayList<String>()
+        );
+
+        TicketedEvent te1 = new TicketedEvent(
+                1,
+                ep,
+                "test ticketed event",
+                EventType.Movie,
+                10,
+                1
+        );
+
+        TicketedEvent te2 = new TicketedEvent(
+                2,
+                ep,
+                "test ticketed event",
+                EventType.Movie,
+                10,
+                1
+        );
+
+        TicketedEvent te3 = new TicketedEvent(
+                3,
+                ep,
+                "test ticketed event",
+                EventType.Movie,
+                10,
+                1
+        );
+
+        testSS.addSponsorshipRequest(te1);
+        testSS.addSponsorshipRequest(te2);
+        testSS.addSponsorshipRequest(te3);
+
+        SponsorshipRequest sponsorshipReq1 = testSS.getAllSponsorshipRequests().get(0);
+        sponsorshipReq1.accept(10, "test sponsor email");
+
+        assertEquals(te2, testSS.getPendingSponsorshipRequests().get(0).getEvent());
+        assertEquals(te3, testSS.getPendingSponsorshipRequests().get(1).getEvent());
+    }
+
 
 }
