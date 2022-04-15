@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CreateEventTests {
+public class CreateEventSystemTests {
     @BeforeEach
     void printTestName(TestInfo testInfo) {
         System.out.println(testInfo.getDisplayName());

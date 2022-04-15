@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class BookEventTests {
+public class BookEventSystemTests {
     @BeforeEach
     void printTestName(TestInfo testInfo) {
         System.out.println(testInfo.getDisplayName());

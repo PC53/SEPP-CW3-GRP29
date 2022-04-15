@@ -3,7 +3,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInfo;
 
-public class RequestBookingRecordsTests {
+public class RequestBookingRecordsSystemTests {
     @BeforeEach
     void printTestName(TestInfo testInfo) {
         System.out.println(testInfo.getDisplayName());
