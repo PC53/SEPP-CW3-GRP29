@@ -3,10 +3,7 @@ import controller.Context;
 import controller.Controller;
 import logging.Logger;
 import model.*;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.*;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -162,6 +159,7 @@ public class LogInSystemTests {
 
     // also may need to add some assert equals to areas of the test to check if their logged in
     @Test
+    @DisplayName("large test to perform all methods")
     void loginConsumersTest() {
         Controller controller = new Controller();
 
@@ -200,6 +198,7 @@ public class LogInSystemTests {
     }
 
     @Test
+    @DisplayName("Testing if the login command correctly logins in a consumer")
     void checkCurrentUserIsLoggedIn() {
         Controller controller = new Controller();
 
@@ -220,6 +219,7 @@ public class LogInSystemTests {
     }
 
     @Test
+    @DisplayName("Testing if a consumer can update their password")
     void checkConsumerCanChangePassword() {
         Controller controller = new Controller();
 
@@ -254,6 +254,7 @@ public class LogInSystemTests {
     }
 
     @Test
+    @DisplayName("Testing if a user can update their email")
     void updatingConsumerEmail() {
         Controller controller = new Controller();
 
@@ -292,6 +293,7 @@ public class LogInSystemTests {
     // Need to to check that updated password has been encrypted.
 
     @Test
+    @DisplayName("Testing if consumer preferences are successfully updated")
     void settingConsumerPreferences() {
         Controller controller = new Controller();
 
@@ -320,6 +322,7 @@ public class LogInSystemTests {
 
     // -----------TESTING ENTERTAINMENT REP LOGIN-----------
     @Test
+    @DisplayName("Testing the logging in of an entertainment provider")
     void loginEntertainmentRepresentative() {
         Controller controller = new Controller();
 
@@ -336,6 +339,7 @@ public class LogInSystemTests {
 
     // ----------TESTING GOV REP LOGIN------------
     @Test
+    @DisplayName("Testing the logging in of the government representative")
     void loginGovernmentRepresentative() {
         Controller controller = new Controller();
 
