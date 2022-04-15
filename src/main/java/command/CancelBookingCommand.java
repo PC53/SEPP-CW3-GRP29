@@ -61,6 +61,7 @@ public class CancelBookingCommand extends Object implements ICommand{
         }else {
             resultName = "Booking Cancellation Unsuccessful";
         }
+        System.out.println(resultName);
         Logger.getInstance().logAction("command.CancelBookingCommand", resultName);
     }
 

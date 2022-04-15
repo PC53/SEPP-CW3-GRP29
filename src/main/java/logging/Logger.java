@@ -1,5 +1,6 @@
 package logging;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +10,7 @@ public class Logger extends Object{
     private static Logger logger = null;
 
     private Logger(){
-        this.log = Collections.<LogEntry>emptyList();
+        this.log = new ArrayList<LogEntry>();
     }
 
     public static Logger getInstance(){
