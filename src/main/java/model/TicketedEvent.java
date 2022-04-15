@@ -38,7 +38,8 @@ public class TicketedEvent extends Event {
     }
 
     public boolean isSponsored() {
-        return (currentSponsorshipRequest.getStatus() == SponsorshipStatus.ACCEPTED);
+        return (currentSponsorshipRequest != null &&
+                currentSponsorshipRequest.getStatus() == SponsorshipStatus.ACCEPTED);
     }
 
     public void setSponsorshipRequest(SponsorshipRequest sponsorshipRequest) {
