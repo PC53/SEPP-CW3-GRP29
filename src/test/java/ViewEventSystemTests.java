@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ViewEventSystemTests {
     @BeforeEach
@@ -237,23 +238,20 @@ public class ViewEventSystemTests {
         ListEventsCommand cmd = new ListEventsCommand(false, true);
         controller.runCommand(cmd);
         List<Event> eventList = cmd.getResult();
-//        NonTicketedEvent event = (NonTicketedEvent) eventList.get(0);
-//        Collection<EventPerformance> performanceList = event.getPerformances();
-//        EventPerformance performance1 = (EventPerformance) performanceList.toArray()[0];
-//        EventPerformance performance2 = (EventPerformance) performanceList.toArray()[1];
+        NonTicketedEvent event = (NonTicketedEvent) eventList.get(0);
+        Collection<EventPerformance> performanceList = event.getPerformances();
+        EventPerformance performance1 = (EventPerformance) performanceList.toArray()[0];
+        EventPerformance performance2 = (EventPerformance) performanceList.toArray()[1];
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm a");
 
-        assertEquals(null, eventList);
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm a");
-
-//        assertEquals(1, performance1.getPerformanceNumber());
-//        assertEquals(2, performance2.getPerformanceNumber());
-//        assertEquals(1, performance1.getEvent());
-//        assertEquals(1, performance2.getEvent());
-//        assertEquals(LocalDateTime.now().plusWeeks(2).format(formatter), performance1.getStartDateTime().format(formatter));
-//        assertEquals(LocalDateTime.now().plusWeeks(2).plusHours(5).format(formatter), performance1.getEndDateTime().format(formatter));
-//        assertEquals(LocalDateTime.now().plusWeeks(1).format(formatter), performance2.getStartDateTime().format(formatter));
-//        assertEquals(LocalDateTime.now().plusWeeks(1).plusHours(2).format(formatter), performance2.getEndDateTime().format(formatter));
+        assertEquals(1, eventList.size());
+        assertEquals(1, performance1.getPerformanceNumber());
+        assertEquals(2, performance2.getPerformanceNumber());
+        assertEquals(1, performance1.getEvent().getEventNumber());
+        assertEquals(1, performance2.getEvent().getEventNumber());
+        assertEquals(LocalDateTime.now().plusWeeks(2).format(formatter), performance1.getStartDateTime().format(formatter));
+        assertEquals(LocalDateTime.now().plusWeeks(2).plusHours(5).format(formatter), performance1.getEndDateTime().format(formatter));
+        assertEquals(LocalDateTime.now().plusWeeks(1).format(formatter), performance2.getStartDateTime().format(formatter));
+        assertEquals(LocalDateTime.now().plusWeeks(1).plusHours(2).format(formatter), performance2.getEndDateTime().format(formatter));
     }
-
-
 }
