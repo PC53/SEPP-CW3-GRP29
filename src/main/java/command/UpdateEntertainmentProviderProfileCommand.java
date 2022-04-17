@@ -54,7 +54,7 @@ public class UpdateEntertainmentProviderProfileCommand extends UpdateProfileComm
             boolean uniqueOrgEmail = true;
             boolean uniqueOrgAddress = true;
             for (String userEmail : allUsers.keySet()) {
-                if (userEmail.equals(newMainRepEmail)) {
+                if (userEmail.equals(newMainRepEmail) && !userEmail.equals(currentUser.getEmail())) {
                     uniqueUserEmail = false;
                     break;
                 }
@@ -66,13 +66,17 @@ public class UpdateEntertainmentProviderProfileCommand extends UpdateProfileComm
                 }
             }
             for (User user : allUsers.values()) {
-                if (newOrgName.equals(((EntertainmentProvider) user).getOrgName())) {
-                    uniqueOrgEmail = false;
-                    break;
-                }
-                if (newOrgAddress.equals(((EntertainmentProvider) user).getOrgAddress())) {
-                    uniqueOrgAddress = false;
-                    break;
+                if (user instanceof EntertainmentProvider) {
+                    if (newOrgName.equals(((EntertainmentProvider) user).getOrgName())
+                            && !newOrgName.equals(((EntertainmentProvider) currentUser).getOrgName())) {
+                        uniqueOrgEmail = false;
+                        break;
+                    }
+                    if (newOrgAddress.equals(((EntertainmentProvider) user).getOrgAddress())
+                            && !newOrgAddress.equals(((EntertainmentProvider) currentUser).getOrgAddress())) {
+                        uniqueOrgAddress = false;
+                        break;
+                    }
                 }
             }
             if (uniqueOrgAddress && uniqueOrgEmail && uniqueUserEmail) {
@@ -91,4 +95,3 @@ public class UpdateEntertainmentProviderProfileCommand extends UpdateProfileComm
         }
     }
 }
-//merge test
