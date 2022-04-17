@@ -37,7 +37,7 @@ public class GovernmentReport1Command extends Object implements ICommand{
      *      * currently logged-in user is a government representative <p>
      *      * the event of the Bookings is a TicketedEvent <p>
      *      * the status of the event of the Bookings is ACTIVE <p>
-     *      * the sponsorship status of the event of the Bookings is ACCEPTED <p>
+     *      * the sponsorship status of the event of the Bookings is ACCEPTED
      */
     @Override
     public void execute(Context context) {
