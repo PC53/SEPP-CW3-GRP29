@@ -36,6 +36,7 @@ public class GovernmentReport1Command extends Object implements ICommand{
      *      * intervalStartInclusive is not equal to or after intervalEndInclusive <p>
      *      * currently logged-in user is a government representative <p>
      *      * the event of the Bookings is a TicketedEvent <p>
+     *      * the status of the event of the Bookings is ACTIVE <p>
      *      * the sponsorship status of the event of the Bookings is ACCEPTED <p>
      */
     @Override
