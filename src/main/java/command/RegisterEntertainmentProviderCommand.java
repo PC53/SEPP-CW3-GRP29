@@ -60,7 +60,7 @@ public class RegisterEntertainmentProviderCommand extends Object implements ICom
                     }
                 }
             }
-            if(!orgRegistered){
+            if(!repRegistered && !orgRegistered){
                 newEP = new EntertainmentProvider(orgName,orgAddress,paymentAccountEmail,
                                                                         mainRepName,mainRepEmail,password,otherRepNames,
                                                                         otherRepEmails);
