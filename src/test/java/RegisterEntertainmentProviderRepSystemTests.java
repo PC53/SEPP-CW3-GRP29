@@ -110,8 +110,8 @@ public class RegisterEntertainmentProviderRepSystemTests {
         Controller controller = new Controller();
 
         // I think this line (and all others like it) are redundant.
-        registerEntProvider1(controller);
-        controller.runCommand(new LogoutCommand());
+        // registerEntProvider1(controller);
+        // controller.runCommand(new LogoutCommand());
 
         ArrayList<String> orgReps = new ArrayList<String>();
         orgReps.add("Jane Org");
@@ -145,8 +145,8 @@ public class RegisterEntertainmentProviderRepSystemTests {
     void RegisterEntertainmentProvider2() {
         Controller controller = new Controller();
 
-        registerEntProvider1(controller);
-        controller.runCommand(new LogoutCommand());
+        // registerEntProvider2(controller);
+        // controller.runCommand(new LogoutCommand());
 
         ArrayList<String> orgReps = new ArrayList<String>();
         orgReps.add("Andy One");
@@ -180,8 +180,8 @@ public class RegisterEntertainmentProviderRepSystemTests {
     void RegisterEntertainmentProvider3() {
         Controller controller = new Controller();
 
-        registerEntProvider3(controller);
-        controller.runCommand(new LogoutCommand());
+        // registerEntProvider3(controller);
+        // controller.runCommand(new LogoutCommand());
 
         ArrayList<String> orgReps = new ArrayList<String>();
         ArrayList<String> orgRepsEmails = new ArrayList<String>();
@@ -203,7 +203,7 @@ public class RegisterEntertainmentProviderRepSystemTests {
         assertEquals("Lone Wolf co", ep.getOrgName());
         assertEquals("the middle of nowhere", ep.getOrgAddress());
         assertEquals("lonewolf@gmail.com", ep.getPaymentAccountEmail());
-        assertEquals("lonewolf@gmail.com", ep.getEmail());
+        assertEquals("lone-wolf@gmail.com", ep.getEmail());
         assertEquals(true, ep.checkPasswordMatch("2w3SEDrFTGYHujn"));
     }
 
@@ -212,9 +212,8 @@ public class RegisterEntertainmentProviderRepSystemTests {
         Controller controller = new Controller();
 
         registerEntProvider1(controller);
-
-        updateEntProvider1(controller);
-        controller.runCommand(new LogoutCommand());
+        // updateEntProvider1(controller);
+        // controller.runCommand(new LogoutCommand());
 
         ArrayList<String> orgReps = new ArrayList<String>();
         orgReps.add("Jane Org");
@@ -222,20 +221,6 @@ public class RegisterEntertainmentProviderRepSystemTests {
         ArrayList<String> orgRepsEmails = new ArrayList<String>();
         orgRepsEmails.add("janeorg@gmail.com");
         orgRepsEmails.add("joshorg@gmail.com");
-
-        RegisterEntertainmentProviderCommand cmd = new RegisterEntertainmentProviderCommand(
-                "entertainmentOrgOne",
-                "22 Org Street, OrgCity, Scotland",
-                "orgone@gmail.com",
-                "Joe Org",
-                "joeorg@gmail.com",
-                "iloveorgs",
-                orgReps,
-                orgRepsEmails
-        );
-
-        controller.runCommand(cmd);
-        EntertainmentProvider ep = cmd.getResult();
 
         UpdateEntertainmentProviderProfileCommand cmd1 = new UpdateEntertainmentProviderProfileCommand(
                 "iloveorgs",
