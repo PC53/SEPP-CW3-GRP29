@@ -62,6 +62,11 @@ public class CancelEventCommand extends Object implements ICommand{
 
                                 }
                             }
+                            else if(performanceResult && event instanceof NonTicketedEvent) {
+                                event.cancel();
+                                event.getOrganiser().getProviderSystem().cancelEvent(eventNumber, organiserMessage);
+                                result = true;
+                            }
                         }
                     }
                 }
