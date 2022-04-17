@@ -24,7 +24,7 @@ public class TicketedEvent extends Event {
 
     public double getDiscountedTicketPrice() {
         if (this.isSponsored()) {
-            return ticketPrice * currentSponsorshipRequest.getSponsoredPricePercent();
+            return ticketPrice * (1 - 0.01 * currentSponsorshipRequest.getSponsoredPricePercent());
         }
         else { return ticketPrice; }
     }
