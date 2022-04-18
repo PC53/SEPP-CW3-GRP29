@@ -7,6 +7,7 @@ import model.*;
 import java.time.Duration;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 public class CancelBookingCommand extends Object implements ICommand{
     private final long bookingNumber;
@@ -55,14 +56,14 @@ public class CancelBookingCommand extends Object implements ICommand{
             }
         }
 
-        String resultName;
         if(result) {
-            resultName = "Booking_Successfully_cancelled";
+            Logger.getInstance().logAction("command.CancelBookingCommand",
+                    "Booking_Successfully_Cancelled");
         }else {
-            resultName = "Booking Cancellation Unsuccessful";
+            Logger.getInstance().logAction("command.CancelBookingCommand",
+                    "Booking_Cancellation_Unsuccessful",
+                    Map.of("booking Number",bookingNumber));
         }
-        System.out.println(resultName);
-        Logger.getInstance().logAction("command.CancelBookingCommand", resultName);
     }
 
     @Override

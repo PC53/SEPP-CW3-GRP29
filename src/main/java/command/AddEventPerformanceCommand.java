@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.EntertainmentProvider;
 import model.Event;
 import model.EventPerformance;
@@ -8,6 +9,7 @@ import model.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public class AddEventPerformanceCommand extends Object implements ICommand{
 
@@ -93,6 +95,17 @@ public class AddEventPerformanceCommand extends Object implements ICommand{
                     }
                 }
             }
+        }
+
+        if(finalEP!=null) {
+            Logger.getInstance().logAction("command.AddEventPerformanceCommand",
+                    "Event_Performance_Added");
+        }else {
+            Logger.getInstance().logAction("command.AddEventPerformanceCommand",
+                    "Event_Performance_Not_Added",
+                    Map.of("event Number",eventNumber,
+                            "start",startDateTime,
+                            "end",endDateTime));
         }
     }
 

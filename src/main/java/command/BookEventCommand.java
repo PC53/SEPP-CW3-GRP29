@@ -1,9 +1,11 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.*;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 public class BookEventCommand extends Object implements ICommand{
     private final long eventNumber;
@@ -61,6 +63,14 @@ public class BookEventCommand extends Object implements ICommand{
                     }
                 }
             }
+        }
+
+        if(result) {
+            Logger.getInstance().logAction("command.BookEventCommand",
+                    "Booking_Successfully_Made");
+        }else {
+            Logger.getInstance().logAction("command.CancelBookingCommand",
+                    "Booking unsuccessful");
         }
 
     }

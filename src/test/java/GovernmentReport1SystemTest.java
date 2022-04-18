@@ -362,7 +362,7 @@ public class GovernmentReport1SystemTest {
         controller.runCommand(new LogoutCommand());
 
         loginConsumer3(controller);
-        consumerBookNthTicketedEvent(controller, 4);
+        consumerBookNthTicketedEvent(controller, 3);
         controller.runCommand(new LogoutCommand());
 
         loginOlympicsProvider(controller);

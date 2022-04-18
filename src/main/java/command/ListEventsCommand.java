@@ -4,6 +4,7 @@ import controller.Context;
 import model.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,7 @@ public class ListEventsCommand extends Object implements ICommand{
     @Override
     public void execute(Context context){
         User user = context.getUserState().getCurrentUser();
-        List<Event> allEvents = context.getEventState().getAllEvents();
+        List<Event> allEvents = filterFutureEvents(context.getEventState().getAllEvents());
 
         if (userEventsOnly) {
             if (user instanceof EntertainmentProvider) {
@@ -39,12 +40,28 @@ public class ListEventsCommand extends Object implements ICommand{
 
     }
 
+    // filter out event with at least 1 EventPerformance which hasn't started
+    private List<Event> filterFutureEvents(List<Event> allEvents){
+        List<Event> output = new ArrayList<>();
+        for(Event event : allEvents){
+            for(EventPerformance performance: event.getPerformances()){
+                if(!LocalDateTime.now().isAfter(performance.getStartDateTime())){
+                    output.add(event);
+                    break;
+                }
+            }
+        }
+        return output;
+    }
+
+    // filter events if they match user preferences
     protected List<Event> filterByPreference(List<Event> allEvents,Consumer consumer) {
         return allEvents.stream()
                 .filter(f -> checkPreferencesInPerformances(f,consumer.getPreferences()))
                 .collect(Collectors.toList());
     }
 
+    // Event is selected if all the preferences match
     protected boolean checkPreferencesInPerformances(Event event, ConsumerPreferences preferences){
         for (EventPerformance ep : event.getPerformances()){
             if(ep.getStartDateTime().isAfter(LocalDateTime.now())
@@ -58,10 +75,12 @@ public class ListEventsCommand extends Object implements ICommand{
         return false;
     }
 
+    // return events by a particular Entertainment Provider
     protected List<Event> filterByEp(List<Event> events, EntertainmentProvider ep) {
         return events.stream().filter(f -> f.getOrganiser().equals(ep)).collect(Collectors.toList());
     }
 
+    // return active events
     protected List<Event> filterByActive(List<Event> events) {
         List<Event> filteredEvents = events.stream().filter(f -> f.getStatus() == EventStatus.ACTIVE).collect(Collectors.toList());
         return filteredEvents;
