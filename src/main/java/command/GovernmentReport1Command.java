@@ -17,6 +17,16 @@ import model.*;
  */
 public class GovernmentReport1Command extends Object implements ICommand{
 
+    enum LogStatus{
+        GOVERNMENT_REPORT1_NOT_LOGGED_IN,
+        GOVERNMENT_REPORT1_USER_NOT_GOVERNMENT_REPRESENTATIVE,
+                GOVERNMENT_REPORT1_SUCCESS
+    }
+
+    private void logResult(GovernmentReport1Command.LogStatus status){
+        Logger.getInstance().logAction("command.GovernmentReport1Command",status);
+    }
+
     private final LocalDateTime intervalStartInclusive;
     private final LocalDateTime intervalEndInclusive;
     private List<Booking> output;
@@ -44,6 +54,11 @@ public class GovernmentReport1Command extends Object implements ICommand{
     @Override
     public void execute(Context context) {
         User user = context.getUserState().getCurrentUser();
+
+        if(user == null){
+            logResult(LogStatus.GOVERNMENT_REPORT1_NOT_LOGGED_IN);
+            return;
+        }
 
         if(intervalEndInclusive.isBefore(intervalStartInclusive) || intervalEndInclusive.isEqual(intervalStartInclusive)){
             return;
@@ -74,8 +89,11 @@ public class GovernmentReport1Command extends Object implements ICommand{
                         }
                     }
                 }
+
+                logResult(LogStatus.GOVERNMENT_REPORT1_SUCCESS);
             }
         } else {
+            logResult( LogStatus.GOVERNMENT_REPORT1_USER_NOT_GOVERNMENT_REPRESENTATIVE);
             return;
         }
 

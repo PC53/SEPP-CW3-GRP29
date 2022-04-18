@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.Consumer;
 import model.EntertainmentProvider;
 import model.User;
@@ -10,6 +11,17 @@ import java.util.List;
 import java.util.Map;
 
 public class UpdateEntertainmentProviderProfileCommand extends UpdateProfileCommand{
+
+    enum LogStatus{
+        USER_UPDATE_PROFILE_SUCCESS,
+        USER_UPDATE_PROFILE_FIELDS_CANNOT_BE_NULL,
+                USER_UPDATE_PROFILE_NOT_ENTERTAINMENT_PROVIDER,
+        USER_UPDATE_PROFILE_ORG_ALREADY_REGISTERED
+    }
+
+    private void logResult(UpdateEntertainmentProviderProfileCommand.LogStatus status){
+        Logger.getInstance().logAction("command.UpdateEntertainmentProviderCommand",status);
+    }
 
     private final String oldPassword;
     private final String newOrgName;
@@ -46,6 +58,9 @@ public class UpdateEntertainmentProviderProfileCommand extends UpdateProfileComm
         IUserState generalUserState = context.getUserState();
         Map<String, User> allUsers = generalUserState.getAllUsers();
         User currentUser = generalUserState.getCurrentUser();
+        if(!(currentUser instanceof EntertainmentProvider)){
+            logResult(LogStatus.USER_UPDATE_PROFILE_NOT_ENTERTAINMENT_PROVIDER);
+        }
 
         if (oldPassword != null && newOrgName != null && newOrgAddress != null && newPaymentAccountEmail != null && newMainRepName != null
                 && newMainRepEmail != null && newPassword != null && newOtherRepNames != null && newOtherRepEmails != null
@@ -53,6 +68,8 @@ public class UpdateEntertainmentProviderProfileCommand extends UpdateProfileComm
             boolean uniqueUserEmail = true;
             boolean uniqueOrgEmail = true;
             boolean uniqueOrgAddress = true;
+
+
             for (String userEmail : allUsers.keySet()) {
                 if (userEmail.equals(newMainRepEmail) && !userEmail.equals(currentUser.getEmail())) {
                     uniqueUserEmail = false;
@@ -89,9 +106,11 @@ public class UpdateEntertainmentProviderProfileCommand extends UpdateProfileComm
                 ((EntertainmentProvider) currentUser).setOtherRepNames(newOtherRepNames);
                 ((EntertainmentProvider) currentUser).setOtherRepEmails(newOtherRepEmails);
                 super.successResult = true;
+                logResult(LogStatus.USER_UPDATE_PROFILE_SUCCESS);
             } else {
                 super.successResult = false;
+                logResult(LogStatus.USER_UPDATE_PROFILE_ORG_ALREADY_REGISTERED);
             }
-        }
+        }else logResult(LogStatus.USER_UPDATE_PROFILE_FIELDS_CANNOT_BE_NULL);
     }
 }

@@ -186,7 +186,6 @@ public class ViewEventSystemTests {
         Controller controller = new Controller();
         registerEntertainmentProvider(controller);
         arrangeNonTicketedEvent(controller);
-        controller.runCommand(new LogoutCommand());
         registerConsumer(controller);
         ListEventsCommand cmd = new ListEventsCommand(false, false);
         controller.runCommand(cmd);
@@ -201,7 +200,6 @@ public class ViewEventSystemTests {
         Controller controller = new Controller();
         registerEntertainmentProvider(controller);
         arrangeTicketedEvent(controller);
-        controller.runCommand(new LogoutCommand());
         registerConsumer(controller);
         ListEventsCommand cmd = new ListEventsCommand(false, true);
         controller.runCommand(cmd);
@@ -216,7 +214,6 @@ public class ViewEventSystemTests {
         Controller controller = new Controller();
         registerEntertainmentProvider(controller);
         arrangeTicketedEvent(controller);
-        controller.runCommand(new LogoutCommand());
         registerConsumer(controller);
         ListEventsCommand cmd = new ListEventsCommand(false, true);
         controller.runCommand(cmd);
@@ -237,7 +234,6 @@ public class ViewEventSystemTests {
         Controller controller = new Controller();
         registerEntertainmentProvider(controller);
         arrangeTicketedEvent1Performance(controller);
-        controller.runCommand(new LogoutCommand());
         registerConsumer(controller);
         ListEventsCommand cmd = new ListEventsCommand(false, true);
         controller.runCommand(cmd);
@@ -264,7 +260,6 @@ public class ViewEventSystemTests {
         Controller controller = new Controller();
         registerEntertainmentProvider(controller);
         arrangeNonTicketedEvent2Performance(controller);
-        controller.runCommand(new LogoutCommand());
         registerConsumer(controller);
         ListEventsCommand cmd = new ListEventsCommand(false, true);
         controller.runCommand(cmd);

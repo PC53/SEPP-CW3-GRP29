@@ -1,12 +1,24 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.Consumer;
 import model.User;
 
 import java.util.Map;
 
 public class RegisterConsumerCommand extends Object implements ICommand{
+
+    enum LogStatus{
+        REGISTER_CONSUMER_SUCCESS,
+        USER_REGISTER_FIELDS_CANNOT_BE_NULL,
+                USER_REGISTER_EMAIL_ALREADY_REGISTERED,
+        USER_LOGIN_SUCCESS
+    }
+
+    private void logResult(RegisterConsumerCommand.LogStatus status){
+        Logger.getInstance().logAction("command.RegisterConsumerCommand",status);
+    }
 
     private final String name;
     private final String email;
@@ -40,9 +52,13 @@ public class RegisterConsumerCommand extends Object implements ICommand{
             if(users.get(email) == null){
                 consumer = new Consumer(name,email,phone,password,paymentAccountEmail);
                 context.getUserState().addUser(consumer);
+                logResult(LogStatus.REGISTER_CONSUMER_SUCCESS);
+
                 context.getUserState().setCurrentUser(consumer);
-            }
-        }
+                logResult(LogStatus.USER_LOGIN_SUCCESS);
+
+            }else logResult(LogStatus.USER_REGISTER_EMAIL_ALREADY_REGISTERED);
+        }else logResult(LogStatus.USER_REGISTER_FIELDS_CANNOT_BE_NULL);
 
     }
 

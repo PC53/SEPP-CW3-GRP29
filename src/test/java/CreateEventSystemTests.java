@@ -434,8 +434,6 @@ public class CreateEventSystemTests {
                 Integer.MAX_VALUE
         ));
 
-        controller.runCommand(new LogoutCommand());
-
         ListEventsCommand cmd3 = new ListEventsCommand(false, false);
         controller.runCommand(cmd3);
         List<Event> listofevents = cmd3.getResult();

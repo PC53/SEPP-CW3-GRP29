@@ -13,6 +13,24 @@ import java.util.Map;
 
 public class CancelEventCommand extends Object implements ICommand{
 
+    enum LogStatus{
+        CANCEL_EVENT_SUCCESS,
+        CANCEL_EVENT_MESSAGE_MUST_NOT_BE_BLANK,
+                CANCEL_EVENT_USER_NOT_ENTERTAINMENT_PROVIDER,
+        CANCEL_EVENT_EVENT_NOT_FOUND,
+                CANCEL_EVENT_NOT_ACTIVE,
+        CANCEL_EVENT_USER_NOT_ORGANISER,
+                CANCEL_EVENT_PERFORMANCE_ALREADY_STARTED,
+        CANCEL_EVENT_REFUND_SPONSORSHIP_SUCCESS,
+                CANCEL_EVENT_REFUND_SPONSORSHIP_FAILED,
+        CANCEL_EVENT_REFUND_BOOKING_SUCCESS,
+                CANCEL_EVENT_REFUND_BOOKING_ERROR
+    }
+
+    private void logResult(CancelEventCommand.LogStatus status){
+        Logger.getInstance().logAction("command.CancelEventCommand",status);
+    }
+
     private final String organiserMessage;
     private final long eventNumber;
 
@@ -45,43 +63,52 @@ public class CancelEventCommand extends Object implements ICommand{
                                     break;
                                 }
                             }
-
-                            if(performanceResult && event instanceof TicketedEvent){
-                                if(((TicketedEvent) event).isSponsored()){
-                                    result =  refundSponsorship(context,(TicketedEvent)event);
-                                }
-                                result = refundBookings(context,(TicketedEvent)event);
-
-                                if(result) {
-                                    event.cancel();
-                                    // record in Entertainment provider system
-                                    event.getOrganiser().getProviderSystem().cancelEvent(eventNumber, organiserMessage);
-
-                                    // cancel all the bookings
-                                    for (Booking booking : context.getBookingState().findBookingsByEventNumber(eventNumber)){
-                                        booking.cancelByProvider();
+                            if(performanceResult) {
+                                if (event instanceof TicketedEvent) {
+                                    if (((TicketedEvent) event).isSponsored()) {
+                                        if (refundSponsorship(context, (TicketedEvent) event)){
+                                            result = true;
+                                            logResult(LogStatus.CANCEL_EVENT_REFUND_SPONSORSHIP_SUCCESS);
+                                        }else {
+                                            logResult(LogStatus.CANCEL_EVENT_REFUND_SPONSORSHIP_FAILED);
+                                            result = false;
+                                        }
+                                    }
+                                    if(refundBookings(context, (TicketedEvent) event)){
+                                        result = true;
+                                        logResult(LogStatus.CANCEL_EVENT_REFUND_BOOKING_SUCCESS);
+                                    }else {
+                                        logResult(LogStatus.CANCEL_EVENT_REFUND_BOOKING_ERROR);
+                                        result = false;
                                     }
 
-                                }
-                            }
-                            else if(performanceResult && event instanceof NonTicketedEvent) {
-                                event.cancel();
-                                event.getOrganiser().getProviderSystem().cancelEvent(eventNumber, organiserMessage);
-                                result = true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
 
-        if(result) {
-            Logger.getInstance().logAction("command.CancelEventCommand",
-                    "Event_Successfully_Cancelled");
-        }else {
-            Logger.getInstance().logAction("command.CancelEventCommand",
-                    "Event_Cancellation_Unsuccessful");
-        }
+                                    if (result) {
+                                        event.cancel();
+                                        // record in Entertainment provider system
+                                        event.getOrganiser().getProviderSystem().cancelEvent(eventNumber, organiserMessage);
+
+                                        // cancel all the bookings
+                                        for (Booking booking : context.getBookingState().findBookingsByEventNumber(eventNumber)) {
+                                            booking.cancelByProvider();
+                                        }
+
+                                        logResult(LogStatus.CANCEL_EVENT_SUCCESS);
+
+                                    }
+                                }
+
+                                else if (event instanceof NonTicketedEvent) {
+                                    event.cancel();
+                                    event.getOrganiser().getProviderSystem().cancelEvent(eventNumber, organiserMessage);
+                                    result = true;
+                                }
+                            }else logResult(LogStatus.CANCEL_EVENT_PERFORMANCE_ALREADY_STARTED);
+                        }else logResult(LogStatus.CANCEL_EVENT_USER_NOT_ORGANISER);
+                    }else logResult(LogStatus.CANCEL_EVENT_NOT_ACTIVE);
+                }else logResult(LogStatus.CANCEL_EVENT_EVENT_NOT_FOUND);
+            }else logResult(LogStatus.CANCEL_EVENT_USER_NOT_ENTERTAINMENT_PROVIDER);
+        }else logResult(LogStatus.CANCEL_EVENT_MESSAGE_MUST_NOT_BE_BLANK);
     }
 
     private boolean refundBookings(Context context,TicketedEvent event){

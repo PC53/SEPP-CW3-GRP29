@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.Consumer;
 import model.ConsumerPreferences;
 import model.User;
@@ -9,6 +10,16 @@ import state.IUserState;
 import java.util.Map;
 
 public class UpdateConsumerProfileCommand extends UpdateProfileCommand{
+
+    enum LogStatus{
+        USER_UPDATE_PROFILE_FIELDS_CANNOT_BE_NULL,
+        USER_UPDATE_PROFILE_NOT_CONSUMER,
+                USER_UPDATE_PROFILE_SUCCESS
+    }
+
+    private void logResult(UpdateConsumerProfileCommand.LogStatus status){
+        Logger.getInstance().logAction("command.UpdateConsumerProfileCommand",status);
+    }
 
     private final String oldPassword;
     private final String newName;
@@ -40,32 +51,39 @@ public class UpdateConsumerProfileCommand extends UpdateProfileCommand{
         Map<String, User> allUsers = generalUserState.getAllUsers();
         User currentUser = generalUserState.getCurrentUser();
 
-        if (currentUser.checkPasswordMatch(oldPassword) && (currentUser instanceof Consumer)) {
-            boolean uniqueEmail = true;
-            for (String userEmail : allUsers.keySet()) {
-                if (userEmail.equals(newEmail) && !(userEmail.equals(currentUser.getEmail()))) {
-                    uniqueEmail = false;
-                    break;
+        if (newName != null && !newName.equals("")
+                && newEmail != null && !newEmail.equals("")
+                && newPhoneNumber != null && !newPhoneNumber.equals("")
+                && newPassword != null && !newPassword.equals("")
+                && newPaymentAccountEmail != null && !newPaymentAccountEmail.equals("")) {
+            if (currentUser.checkPasswordMatch(oldPassword) && (currentUser instanceof Consumer)) {
+                boolean uniqueEmail = true;
+                for (String userEmail : allUsers.keySet()) {
+                    if (userEmail.equals(newEmail) && !(userEmail.equals(currentUser.getEmail()))) {
+                        uniqueEmail = false;
+                        break;
+                    }
                 }
-            }
-            if (uniqueEmail) {
-                // need to delete element from hashmap and replace with this new 1
-                allUsers.remove(currentUser.getEmail());
-                Consumer temp = new Consumer(
-                        newName,
-                        newEmail,
-                        newPhoneNumber,
-                        newPassword,
-                        newPaymentAccountEmail
-                );
-                temp.setPreferences(newPreferences);
-                allUsers.put(newEmail, temp);
+                if (uniqueEmail) {
+                    // need to delete element from hashmap and replace with this new 1
+                    allUsers.remove(currentUser.getEmail());
+                    Consumer temp = new Consumer(
+                            newName,
+                            newEmail,
+                            newPhoneNumber,
+                            newPassword,
+                            newPaymentAccountEmail
+                    );
+                    temp.setPreferences(newPreferences);
+                    allUsers.put(newEmail, temp);
 
-                super.successResult = true;
-            } else {
-                super.successResult = false;
-            }
-        }
+                    super.successResult = true;
+                    logResult(LogStatus.USER_UPDATE_PROFILE_SUCCESS);
+                } else {
+                    super.successResult = false;
+                }
+            } else logResult(LogStatus.USER_UPDATE_PROFILE_NOT_CONSUMER);
+        }else logResult(LogStatus.USER_UPDATE_PROFILE_FIELDS_CANNOT_BE_NULL);
     }
 }
 

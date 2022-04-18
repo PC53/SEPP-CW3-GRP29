@@ -1,9 +1,20 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.*;
 
 public class CreateTicketedEventCommand extends CreateEventCommand{
+
+    enum LogStatus{
+        CREATE_TICKETED_EVENT_SUCCESS,
+        CREATE_EVENT_REQUESTED_SPONSORSHIP
+    }
+
+    private void logResult(CreateTicketedEventCommand.LogStatus status){
+        Logger.getInstance().logAction("command.CreateTicketedEventCommand",status);
+    }
+
 
     private final int numTickets;
     private final double ticketPrice;
@@ -30,6 +41,7 @@ public class CreateTicketedEventCommand extends CreateEventCommand{
 
             if(requestSponsorship){
                 context.getSponsorshipState().addSponsorshipRequest(newTicketedEvent);
+                logResult(LogStatus.CREATE_EVENT_REQUESTED_SPONSORSHIP);
             }
 
             // record in Entertainment provider system
@@ -37,6 +49,8 @@ public class CreateTicketedEventCommand extends CreateEventCommand{
                                                             title,
                                                             numTickets);
             currentUser.addEvent(newTicketedEvent);
+
+            logResult(LogStatus.CREATE_TICKETED_EVENT_SUCCESS);
         }
     }
 }

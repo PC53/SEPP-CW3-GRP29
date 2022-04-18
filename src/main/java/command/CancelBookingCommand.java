@@ -10,6 +10,19 @@ import java.time.LocalDateTime;
 import java.util.Map;
 
 public class CancelBookingCommand extends Object implements ICommand{
+    enum LogStatus{CANCEL_BOOKING_SUCCESS,
+        CANCEL_BOOKING_USER_NOT_CONSUMER,
+                CANCEL_BOOKING_BOOKING_NOT_FOUND,
+        CANCEL_BOOKING_USER_IS_NOT_BOOKER,
+                CANCEL_BOOKING_BOOKING_NOT_ACTIVE,
+        CANCEL_BOOKING_REFUND_FAILED,
+                CANCEL_BOOKING_NO_CANCELLATIONS_WITHIN_24H
+    }
+
+    private void logResult(CancelBookingCommand.LogStatus status){
+        Logger.getInstance().logAction("command.CancelBookingCommand",status);
+    }
+
     private final long bookingNumber;
     private Boolean result = false;
 
@@ -47,23 +60,15 @@ public class CancelBookingCommand extends Object implements ICommand{
 
                                 // record in Entertainment provider system
                                 ep.getProviderSystem().cancelBooking(bookingNumber);
+                                logResult(LogStatus.CANCEL_BOOKING_SUCCESS);
 
-                            }
+                            }else logResult(LogStatus.CANCEL_BOOKING_REFUND_FAILED);
 
-                        }
-                    }
-                }
-            }
-        }
-
-        if(result) {
-            Logger.getInstance().logAction("command.CancelBookingCommand",
-                    "Booking_Successfully_Cancelled");
-        }else {
-            Logger.getInstance().logAction("command.CancelBookingCommand",
-                    "Booking_Cancellation_Unsuccessful",
-                    Map.of("booking Number",bookingNumber));
-        }
+                        }else logResult(LogStatus.CANCEL_BOOKING_NO_CANCELLATIONS_WITHIN_24H);
+                    }else logResult(LogStatus.CANCEL_BOOKING_BOOKING_NOT_ACTIVE);
+                }else logResult(LogStatus.CANCEL_BOOKING_USER_IS_NOT_BOOKER);
+            }else logResult(LogStatus.CANCEL_BOOKING_BOOKING_NOT_FOUND);
+        }else logResult(LogStatus.CANCEL_BOOKING_USER_NOT_CONSUMER);
     }
 
     @Override

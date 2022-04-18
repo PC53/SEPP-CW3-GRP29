@@ -1,12 +1,25 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.EntertainmentProvider;
 import model.User;
 
 import java.util.List;
 
 public class RegisterEntertainmentProviderCommand extends Object implements ICommand{
+
+    enum LogStatus{
+        REGISTER_ENTERTAINMENT_PROVIDER_SUCCESS,
+        USER_REGISTER_FIELDS_CANNOT_BE_NULL,
+                USER_REGISTER_EMAIL_ALREADY_REGISTERED,
+        USER_REGISTER_ORG_ALREADY_REGISTERED,
+                USER_LOGIN_SUCCESS
+    }
+
+    private void logResult(RegisterEntertainmentProviderCommand.LogStatus status){
+        Logger.getInstance().logAction("command.RegisterEntertainmentProviderCommand",status);
+    }
 
     private final String orgName;
     private final String paymentAccountEmail;
@@ -59,15 +72,19 @@ public class RegisterEntertainmentProviderCommand extends Object implements ICom
                         }
                     }
                 }
-            }
+            }else logResult(LogStatus.USER_REGISTER_EMAIL_ALREADY_REGISTERED);
             if(!repRegistered && !orgRegistered){
                 newEP = new EntertainmentProvider(orgName,orgAddress,paymentAccountEmail,
                                                                         mainRepName,mainRepEmail,password,otherRepNames,
                                                                         otherRepEmails);
                 context.getUserState().addUser(newEP);
+                logResult(LogStatus.REGISTER_ENTERTAINMENT_PROVIDER_SUCCESS);
+
                 context.getUserState().setCurrentUser(newEP);
-            }
-        }
+                logResult(LogStatus.USER_LOGIN_SUCCESS);
+
+            }else logResult(LogStatus.USER_REGISTER_ORG_ALREADY_REGISTERED);
+        }else logResult(LogStatus.USER_REGISTER_FIELDS_CANNOT_BE_NULL);
     }
 
     @Override

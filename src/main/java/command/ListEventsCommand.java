@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.*;
 
 import java.time.LocalDateTime;
@@ -9,6 +10,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class ListEventsCommand extends Object implements ICommand{
+
+    enum LogStatus{
+        LIST_USER_EVENTS_SUCCESS,
+        LIST_USER_EVENTS_NOT_LOGGED_IN
+    }
+
+    private void logResult(ListEventsCommand.LogStatus status){
+        Logger.getInstance().logAction("command.ListEventsCommand",status);
+    }
 
     private final boolean userEventsOnly;
     private final boolean activeEventsOnly;
@@ -23,6 +33,9 @@ public class ListEventsCommand extends Object implements ICommand{
     @Override
     public void execute(Context context){
         User user = context.getUserState().getCurrentUser();
+        if(user ==null){
+            logResult(LogStatus.LIST_USER_EVENTS_NOT_LOGGED_IN);
+        }
         List<Event> allEvents = filterFutureEvents(context.getEventState().getAllEvents());
 
         if (userEventsOnly) {
@@ -37,6 +50,8 @@ public class ListEventsCommand extends Object implements ICommand{
         if(activeEventsOnly){
             events = filterByActive(events);
         }
+
+        logResult(LogStatus.LIST_USER_EVENTS_SUCCESS);
 
     }
 
