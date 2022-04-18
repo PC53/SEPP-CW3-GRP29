@@ -50,7 +50,6 @@ public class Booking extends Object {
     }
 
     public void cancelByConsumer() {
-        // this may need to be revised to check if it valid to cancel the booking
         status = BookingStatus.CancelledByConsumer;
     }
 
@@ -61,8 +60,6 @@ public class Booking extends Object {
     public void cancelByProvider() {
         status = BookingStatus.CancelledByProvider;
     }
-
-    // Don't know what this is for.
 
 
     @Override

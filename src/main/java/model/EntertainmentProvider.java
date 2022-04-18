@@ -4,6 +4,7 @@ import external.EntertainmentProviderSystem;
 import external.MockEntertainmentProviderSystem;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EntertainmentProvider extends User{
@@ -37,6 +38,7 @@ public class EntertainmentProvider extends User{
         this.otherRepNames = otherRepNames;
         this.otherRepEmails = otherRepEmails;
         this.epSystem = new MockEntertainmentProviderSystem(orgName, orgAddress);
+        this.events = new ArrayList<>();
     }
 
     public void addEvent(Event event) {

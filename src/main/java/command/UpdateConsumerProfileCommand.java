@@ -60,14 +60,7 @@ public class UpdateConsumerProfileCommand extends UpdateProfileCommand{
                 );
                 temp.setPreferences(newPreferences);
                 allUsers.put(newEmail, temp);
-                /*
-                ((Consumer) currentUser).setName(newName);
-                ((Consumer) currentUser).setEmail(newEmail);
-                ((Consumer) currentUser).setPhoneNumber(newPhoneNumber);
-                ((Consumer) currentUser).updatePassword(newPassword);
-                ((Consumer) currentUser).setPaymentAccountEmail(newPaymentAccountEmail);
-                ((Consumer) currentUser).setPreferences(newPreferences);
-                 */
+
                 super.successResult = true;
             } else {
                 super.successResult = false;

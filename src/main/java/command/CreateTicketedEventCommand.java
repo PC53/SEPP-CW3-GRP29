@@ -36,6 +36,7 @@ public class CreateTicketedEventCommand extends CreateEventCommand{
             currentUser.getProviderSystem().recordNewEvent(newTicketedEvent.getEventNumber(),
                                                             title,
                                                             numTickets);
+            currentUser.addEvent(newTicketedEvent);
         }
     }
 }

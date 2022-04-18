@@ -24,6 +24,8 @@ public class CreateNonTicketedEventCommand extends CreateEventCommand{
             // record in Entertainment provider system
             currentUser.getProviderSystem().recordNewEvent(newNonTicketedEvent.getEventNumber(),
                                                             title,0);
+
+            currentUser.addEvent(newNonTicketedEvent);
         }
     }
 }

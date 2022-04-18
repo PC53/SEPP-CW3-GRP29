@@ -5,7 +5,9 @@ import controller.Context;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import logging.Logger;
 import model.*;
 
 /**
@@ -75,6 +77,14 @@ public class GovernmentReport1Command extends Object implements ICommand{
             }
         } else {
             return;
+        }
+
+        if(output!=null) {
+            Logger.getInstance().logAction("command.GovernmentReport1Command",
+                    "Report_successfully_displayed");
+        }else {
+            Logger.getInstance().logAction("command.GovernmentReport1Command",
+                    "report not displayed");
         }
     }
 

@@ -1,6 +1,7 @@
 package command;
 
 import controller.Context;
+import logging.Logger;
 import model.*;
 
 import java.time.LocalDate;
@@ -8,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class CancelEventCommand extends Object implements ICommand{
 
@@ -71,6 +73,14 @@ public class CancelEventCommand extends Object implements ICommand{
                     }
                 }
             }
+        }
+
+        if(result) {
+            Logger.getInstance().logAction("command.CancelEventCommand",
+                    "Event_Successfully_Cancelled");
+        }else {
+            Logger.getInstance().logAction("command.CancelEventCommand",
+                    "Event_Cancellation_Unsuccessful");
         }
     }
 

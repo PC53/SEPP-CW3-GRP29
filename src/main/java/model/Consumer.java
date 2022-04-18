@@ -11,7 +11,6 @@ public class Consumer extends User{
 
     private ConsumerPreferences preferences;
 
-    private ConsumerPreferences attribute;
 
     public Consumer(String name, String email, String phoneNumber, String password, String paymentAccountEmail) {
         super(email, password, paymentAccountEmail);
@@ -19,7 +18,6 @@ public class Consumer extends User{
         this.phoneNumber = phoneNumber;
 
         preferences = new ConsumerPreferences();
-        //bookings = new List<Booking>;
     }
 
     public void addBooking(Booking booking){
@@ -35,8 +33,6 @@ public class Consumer extends User{
     }
 
     public void setPreferences(ConsumerPreferences preferences) {
-        // not sure if this is implemented how the documentation intends.
-        // you could individually access each attribute of preference and edit them directly.
         this.preferences = preferences;
     }
 
@@ -63,7 +59,6 @@ public class Consumer extends User{
                 ", name='" + name + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", preferences=" + preferences +
-                ", attribute=" + attribute +
                 '}';
     }
 }
