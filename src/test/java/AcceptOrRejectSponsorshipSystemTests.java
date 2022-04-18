@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,6 +77,19 @@ public class AcceptOrRejectSponsorshipSystemTests {
         controller.runCommand(cmd1);
         long eventNum = cmd1.getResult();
 
+        controller.runCommand(new AddEventPerformanceCommand(
+                eventNum,
+                "Leith as usual",
+                LocalDateTime.of(2030, 3, 20, 4, 20),
+                LocalDateTime.of(2030, 3, 20, 6, 45),
+                List.of("The same musician"),
+                true,
+                true,
+                true,
+                Integer.MAX_VALUE,
+                Integer.MAX_VALUE
+        ));
+
         logOutCommand(controller);
 
         govRepLogIn(controller);
@@ -130,6 +144,19 @@ public class AcceptOrRejectSponsorshipSystemTests {
         );
         controller.runCommand(cmd1);
         long eventNum = cmd1.getResult();
+
+        controller.runCommand(new AddEventPerformanceCommand(
+                eventNum,
+                "Leith as usual",
+                LocalDateTime.of(2030, 3, 20, 4, 20),
+                LocalDateTime.of(2030, 3, 20, 6, 45),
+                List.of("The same musician"),
+                true,
+                true,
+                true,
+                Integer.MAX_VALUE,
+                Integer.MAX_VALUE
+        ));
 
         logOutCommand(controller);
 

@@ -131,16 +131,6 @@ public class TestUserState {
     }
 
     @Test
-    @DisplayName("Adding with invalid parameters")
-    void addingUserWithInvalidParameters(){
-        UserState userState = new UserState();
-
-        userState.addUser(null);
-
-        assertEquals(1,userState.getAllUsers().entrySet().size());
-    }
-
-    @Test
     @DisplayName("Checking if current user is updated after login")
     void getCurrentUserAfterLogin(){
         Context context = new Context();

@@ -78,14 +78,36 @@ public class CreateEventSystemTests {
         ));
     }
 
-    private static void createNonTicketedEvent1(Controller controller) {
-        controller.runCommand(new CreateNonTicketedEventCommand(
+    private static long createNonTicketedEvent(Controller controller) {
+        CreateNonTicketedEventCommand cmd = new CreateNonTicketedEventCommand(
                 "non ticketed event one",
                 EventType.Movie
+        );
+
+        controller.runCommand(cmd);
+        long eventNumber1 = cmd.getResult();
+
+        ArrayList<String> performers = new ArrayList<String>();
+        performers.add("performer one");
+
+        controller.runCommand(new AddEventPerformanceCommand(
+                eventNumber1,
+                "test performance 1",
+                LocalDateTime.now().plusMonths(1),
+                LocalDateTime.now().plusMonths(1).plusHours(8),
+                performers,
+                false,
+                true,
+                true,
+                3000,
+                3000
         ));
+
+        return eventNumber1;
+
     }
 
-    private static void createEventWithPerformance(Controller controller) {
+    private static long createEventWithPerformance(Controller controller) {
         CreateTicketedEventCommand eventCmd1 = new CreateTicketedEventCommand(
                 "event with performance 1",
                 EventType.Movie,
@@ -111,6 +133,8 @@ public class CreateEventSystemTests {
                 3000,
                 3000
         ));
+
+        return eventNumber1;
     }
 
     private static void createEventWithMultiplePerformances1(Controller controller) {
@@ -196,55 +220,12 @@ public class CreateEventSystemTests {
     }
 
 
-    /*
-
-    private static void createEventWithSponsorshipRequest(Controller controller) {
-        CreateTicketedEventCommand eventCmd1 = new CreateTicketedEventCommand(
-                "event with sponsored performance 1",
-                EventType.Movie,
-                123456,
-                25,
-                true
-        );
-
-        controller.runCommand(eventCmd1);
-        long eventNumber1 = eventCmd1.getResult();
-
-        ArrayList<String> performers = new ArrayList<String>();
-        performers.add("performer one");
-
-        TicketedEvent tEvent = new TicketedEvent(
-                eventNumber1,
-                "event with sponsored performance 1",
-                EventType.Movie,
-                123456,
-                25,
-                true
-        );
-
-
-        SponsorshipRequest sponorReq = new SponsorshipRequest(1, eventCmd1);
-    }
-
-    */
-
-
-
     @Test
     void creatingTicketedEvent () {
         Controller controller = new Controller();
         registerEntProvider1(controller);
 
-        CreateTicketedEventCommand cmd1 = new CreateTicketedEventCommand(
-                "ticketed event one",
-                EventType.Movie,
-                9999,
-                10,
-                false
-        );
-
-        controller.runCommand(cmd1);
-        Long eventID = cmd1.getResult();
+        Long eventID = createEventWithPerformance(controller);
 
         ListEventsCommand cmd2 = new ListEventsCommand(false, false);
         controller.runCommand(cmd2);
@@ -261,13 +242,7 @@ public class CreateEventSystemTests {
         Controller controller = new Controller();
         registerEntProvider1(controller);
 
-        CreateNonTicketedEventCommand cmd1 = new CreateNonTicketedEventCommand(
-                "non ticketed event one",
-                EventType.Movie
-        );
-
-        controller.runCommand(cmd1);
-        Long eventID = cmd1.getResult();
+        long eventID = createNonTicketedEvent(controller);
 
         ListEventsCommand cmd2 = new ListEventsCommand(false, false);
         controller.runCommand(cmd2);
@@ -288,16 +263,7 @@ public class CreateEventSystemTests {
 
         loginEntProvider1(controller);
 
-        CreateTicketedEventCommand cmd1 = new CreateTicketedEventCommand(
-                "ticketed event one",
-                EventType.Movie,
-                9999,
-                10,
-                false
-        );
-
-        controller.runCommand(cmd1);
-        Long eventID = cmd1.getResult();
+        Long eventID = createEventWithPerformance(controller);
 
         ListEventsCommand cmd2 = new ListEventsCommand(false, false);
         controller.runCommand(cmd2);
@@ -313,16 +279,7 @@ public class CreateEventSystemTests {
         Controller controller = new Controller();
         registerEntProvider1(controller);
 
-        CreateTicketedEventCommand cmd1 = new CreateTicketedEventCommand(
-                "ticketed event one",
-                EventType.Movie,
-                9999,
-                10,
-                false
-        );
-
-        controller.runCommand(cmd1);
-        Long eventID = cmd1.getResult();
+        Long eventID = createEventWithPerformance(controller);
 
         ListEventsCommand cmd2 = new ListEventsCommand(false, false);
         controller.runCommand(cmd2);
@@ -369,16 +326,7 @@ public class CreateEventSystemTests {
         Controller controller = new Controller();
         registerEntProvider1(controller);
 
-        CreateTicketedEventCommand cmd1 = new CreateTicketedEventCommand(
-                "ticketed event one",
-                EventType.Movie,
-                9999,
-                10,
-                false
-        );
-
-        controller.runCommand(cmd1);
-        Long eventID = cmd1.getResult();
+        Long eventID = createEventWithPerformance(controller);
 
         ListEventsCommand cmd2 = new ListEventsCommand(false, false);
         controller.runCommand(cmd2);
@@ -449,6 +397,19 @@ public class CreateEventSystemTests {
         controller.runCommand(cmd1);
         Long event1ID = cmd1.getResult();
 
+        controller.runCommand(new AddEventPerformanceCommand(
+                event1ID,
+                "Leith as usual",
+                LocalDateTime.of(2030, 3, 20, 4, 20),
+                LocalDateTime.of(2030, 3, 20, 6, 45),
+                List.of("The same musician"),
+                true,
+                true,
+                true,
+                Integer.MAX_VALUE,
+                Integer.MAX_VALUE
+        ));
+
         controller.runCommand(new LogoutCommand());
         loginEntProvider2(controller);
 
@@ -459,6 +420,19 @@ public class CreateEventSystemTests {
 
         controller.runCommand(cmd2);
         Long event2ID = cmd2.getResult();
+
+        controller.runCommand(new AddEventPerformanceCommand(
+                event2ID,
+                "Leith as usual",
+                LocalDateTime.of(2030, 3, 20, 4, 20),
+                LocalDateTime.of(2030, 3, 20, 6, 45),
+                List.of("The same musician"),
+                true,
+                true,
+                true,
+                Integer.MAX_VALUE,
+                Integer.MAX_VALUE
+        ));
 
         controller.runCommand(new LogoutCommand());
 
@@ -480,16 +454,7 @@ public class CreateEventSystemTests {
 
         loginEntProvider1(controller);
 
-        CreateTicketedEventCommand cmd1 = new CreateTicketedEventCommand(
-                "ticketed event one",
-                EventType.Movie,
-                9999,
-                10,
-                false
-        );
-
-        controller.runCommand(cmd1);
-        Long event1ID = cmd1.getResult();
+        Long event1ID = createEventWithPerformance(controller);
 
         ListEventsCommand cmd2 = new ListEventsCommand(true, false);
         controller.runCommand(cmd2);
@@ -535,13 +500,7 @@ public class CreateEventSystemTests {
         controller.runCommand(new LogoutCommand());
         loginEntProvider2(controller);
 
-        CreateNonTicketedEventCommand cmd3 = new CreateNonTicketedEventCommand(
-                "non ticketed event one",
-                EventType.Movie
-        );
-
-        controller.runCommand(cmd3);
-        Long event2ID = cmd3.getResult();
+        Long event2ID = createNonTicketedEvent(controller);
 
         ListEventsCommand cmd4 = new ListEventsCommand(true, false);
         controller.runCommand(cmd4);

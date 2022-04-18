@@ -14,6 +14,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class ViewEventSystemTests {
     @BeforeEach
@@ -64,19 +65,50 @@ public class ViewEventSystemTests {
     }
 
     private static void arrangeTicketedEvent(Controller controller) {
-        controller.runCommand(new CreateTicketedEventCommand(
+        CreateTicketedEventCommand cmd = new CreateTicketedEventCommand(
                 "Hamilton Musical",
                 EventType.Theatre,
                 300,
                 15,
                 false
+        );
+        controller.runCommand(cmd);
+
+        controller.runCommand(cmd);
+        controller.runCommand(new AddEventPerformanceCommand(
+                cmd.getResult(),
+                "Leith as usual",
+                LocalDateTime.of(2030, 3, 20, 4, 20),
+                LocalDateTime.of(2030, 3, 20, 6, 45),
+                List.of("The same musician"),
+                true,
+                true,
+                true,
+                Integer.MAX_VALUE,
+                Integer.MAX_VALUE
         ));
+
+
     }
 
     private static void arrangeNonTicketedEvent(Controller controller) {
-        controller.runCommand(new CreateNonTicketedEventCommand(
+        CreateNonTicketedEventCommand cmd = new CreateNonTicketedEventCommand(
                 "Charity Run",
                 EventType.Sports
+        );
+
+        controller.runCommand(cmd);
+        controller.runCommand(new AddEventPerformanceCommand(
+                cmd.getResult(),
+                "Leith as usual",
+                LocalDateTime.of(2030, 3, 20, 4, 20),
+                LocalDateTime.of(2030, 3, 20, 6, 45),
+                List.of("The same musician"),
+                true,
+                true,
+                true,
+                Integer.MAX_VALUE,
+                Integer.MAX_VALUE
         ));
     }
 
@@ -195,7 +227,7 @@ public class ViewEventSystemTests {
         assertEquals(EventType.Theatre, ticketedEvent.getType());
         assertEquals(300, ticketedEvent.getNumTickets());
         assertEquals(15, ticketedEvent.getOriginalTicketPrice());
-        assertEquals(false, ticketedEvent.isSponsored());
+        assertFalse(ticketedEvent.isSponsored());
         assertEquals("Trial Entertainment Org", ticketedEvent.getOrganiser().getOrgName());
         assertEquals("middle of nowhere", ticketedEvent.getOrganiser().getOrgAddress());
     }
